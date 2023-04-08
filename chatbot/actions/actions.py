@@ -25,3 +25,28 @@ from rasa_sdk.executor import CollectingDispatcher
 #         dispatcher.utter_message(text="Hello World!")
 #
 #         return []
+
+class ActionGetHoliday(Action):
+
+    def _get_todays_holiday(self):
+        # TODO: extend for other days than today
+        holidays_api_url = 'https://svatkyapi.cz/api'
+        try:
+            response = requests.get(f'{holidays_api_url}/day')
+            name = response.json()['name']
+            message_cz = f'Dneska má svátek {name}'
+        except:
+            message_cz = 'Momentálně ti bohužel nemůžeme říct, kdo má dneska svátek. Ale dejme tomu, že dneska mají svátek všichni :)'
+
+        return message_cz
+
+    def name(self) -> Text:
+        return "action_get_holiday"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        dispatcher.utter_message(text=self._get_todays_holiday())
+
+        return []
