@@ -1,3 +1,4 @@
 rasa
 requests
 pandas
+polyglot

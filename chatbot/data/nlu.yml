@@ -4,6 +4,17 @@ nlu:
 - intent: greet
   examples: |
     - hey
+    - ahoj
+    - cau
+    - čau
+    - dobrý den
+    - dobry den
+    - dobrý večer
+    - dobry vecer
+    - čus
+    - zdravím
+    - zdarvim
+    - 
     - hello
     - hi
     - hello there
@@ -99,10 +110,16 @@ nlu:
     - what [Msc.](master_degree) programs does FIS offer?
     - what english programs you have on fis for [Master](master_degree) degree?
     - are there any [doctor](doctor_degree) degrees?
+    - what about [PhD](doctor_degree) programs?
+    - jaké [magisterské](master_degree) programy máte?
+    - které [bakalářské](bachelor) programy jsou na FISu?
+    - máte i [doktorské](doctor_degree) programy?
+    
 
 - intent: holiday
   examples: |
     - who's holiday is today?
+    - kdo má dneska svátek?
 
 - lookup: bachelor_degree
   examples: |

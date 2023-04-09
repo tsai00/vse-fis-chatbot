@@ -2,45 +2,57 @@ version: "3.1"
 
 stories:
 
-- story: happy path
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
-
-- story: sad path 1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
-
-- story: sad path 2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
+#- story: happy path
+#  steps:
+#  - intent: greet
+#  - action: action_detect_language
+#  - action: utter_greet
+#  - intent: mood_great
+#  - action: action_detect_language
+#  - action: utter_happy
+#
+#- story: sad path 1
+#  steps:
+#  - intent: greet
+#  - action: action_detect_language
+#  - action: utter_greet
+#  - intent: mood_unhappy
+#  - action: action_detect_language
+#  - action: utter_cheer_up
+#  - action: utter_did_that_help
+#  - intent: affirm
+#  - action: action_detect_language
+#  - action: utter_happy
+#
+#- story: sad path 2
+#  steps:
+#  - intent: greet
+#  - action: action_detect_language
+#  - action: utter_greet
+#  - intent: mood_unhappy
+#  - action: action_detect_language
+#  - action: utter_cheer_up
+#  - action: utter_did_that_help
+#  - intent: deny
+#  - action: action_detect_language
+#  - action: utter_goodbye
 
 - story: get holiday
   steps:
   - intent: greet
+  - action: action_detect_language
   - action: utter_greet
   - intent: holiday
+  - action: action_detect_language
   - action: action_get_holiday
 
 
 - story: get study programs
   steps:
   - intent: greet
+  - action: action_detect_language
   - action: utter_greet
   - intent: study_programs
+  - action: action_detect_language
   - action: action_study_programs
 

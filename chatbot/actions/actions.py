@@ -4,6 +4,36 @@ import json
 from pathlib import Path
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import SlotSet
+from polyglot.detect import Detector
+
+class ActionDetectLanguage(Action):
+    def name(self) -> Text:
+        return "action_detect_language"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        text = tracker.latest_message.get('text')
+        print(text)
+
+        try:
+            result = Detector(text).language
+            langcode = result.code
+            langname = result.name
+        except:
+            langcode = 'en'
+            langname = 'English'
+
+        if langcode not in ['en', 'cs']:
+            dispatcher.utter_message(text=f'Unfortunately I can not speak {langname}, but can only speak English or Czech')
+
+        print(langcode)
+        print(langname)
+
+        return [SlotSet("langcode", langcode), SlotSet("langname", langname)]
+
 
 class ActionStudyPrograms(Action):
 
@@ -14,13 +44,18 @@ class ActionStudyPrograms(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        language = tracker.get_slot('langcode')
+
+        if language not in ['en', 'cs']:
+            language = 'en'
+
         bachelor_degree = next(tracker.get_latest_entity_values('bachelor_degree'), None)
         master_degree = next(tracker.get_latest_entity_values('master_degree'), None)
         doctor_degree = next(tracker.get_latest_entity_values('doctor_degree'), None)
 
-        STUDY_PROGRAMS_LOCATION_EN = Path(Path(__file__).resolve().parent, '..', '..', 'sources', 'programs_en.json')
+        study_programs_file = Path(Path(__file__).resolve().parent, '..', '..', 'sources', f'programs_{language}.json')
 
-        with STUDY_PROGRAMS_LOCATION_EN.open(mode='r') as f:
+        with study_programs_file.open(mode='r') as f:
             json_dict = json.load(f)
 
         print(bachelor_degree)
@@ -28,15 +63,27 @@ class ActionStudyPrograms(Action):
         print(doctor_degree)
 
         if all([bachelor_degree is None, master_degree is None, doctor_degree is None]):
-            message = f"FIS currently offers following programs: \nBachelor: {json_dict['bachelor']}\n" + f"Master: {json_dict['master']}\n" + f"PhD: {json_dict['doctor']}\n"
+            if language == 'cs':
+                message = f"FIS momentálně nabízí následující programy: \nBachelor: {json_dict['bachelor']}\n" + f"Master: {json_dict['master']}\n" + f"PhD: {json_dict['doctor']}\n"
+            else:
+                message = f"FIS currently offers following programs: \nBachelor: {json_dict['bachelor']}\n" + f"Master: {json_dict['master']}\n" + f"PhD: {json_dict['doctor']}\n"
         else:
             message = ''
             if bachelor_degree is not None:
-                message = f'For Bachelor students FIS currently offers following programs:\n {json_dict["bachelor"]}'
+                if language == 'cs':
+                    message = f'FIS momentálně nabízí následující bakalářské programy:\n {json_dict["bachelor"]}'
+                else:
+                    message = f'For Bachelor students FIS currently offers following programs:\n {json_dict["bachelor"]}'
             if master_degree is not None:
-                message = f'For Master students FIS currently offers following programs:\n {json_dict["master"]}'
+                if language == 'cs':
+                    message = f'FIS momentálně nabízí následující magisterské programy:\n {json_dict["master"]}'
+                else:
+                    message = f'For Master students FIS currently offers following programs:\n {json_dict["master"]}'
             if doctor_degree is not None:
-                message = f'For PhD students FIS currently offers following programs:\n {json_dict["doctor"]}'
+                if language == 'cs':
+                    message = f'FIS momentálně nabízí následující doktorské programy:\n {json_dict["doctor"]}'
+                else:
+                    message = f'For PhD students FIS currently offers following programs:\n {json_dict["doctor"]}'
 
         dispatcher.utter_message(text=message)
 
@@ -51,11 +98,10 @@ class ActionGetHoliday(Action):
         try:
             response = requests.get(f'{holidays_api_url}/day')
             name = response.json()['name']
-            message_cz = f'Dneska má svátek {name}'
         except:
-            message_cz = 'Momentálně ti bohužel nemůžeme říct, kdo má dneska svátek. Ale dejme tomu, že dneska mají svátek všichni :)'
+            name = None
 
-        return message_cz
+        return name
 
     def name(self) -> Text:
         return "action_get_holiday"
@@ -64,6 +110,20 @@ class ActionGetHoliday(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        dispatcher.utter_message(text=self._get_todays_holiday())
+        language = tracker.get_slot('langcode')
+        todays_holiday = self._get_todays_holiday()
+
+        if language == 'cs':
+            if todays_holiday is not None:
+                message = f'Dneska má svátek {todays_holiday}'
+            else:
+                message = 'Momentálně ti bohužel nemůžeme říct, kdo má dneska svátek. Ale dejme tomu, že dneska mají svátek všichni :)'
+        else:
+            if todays_holiday is not None:
+                message = f'{todays_holiday} has holiday today'
+            else:
+                message = 'Unfortunately we can\'t say who has holiday today. But let\'s say today is everybody\'s holiday :)'
+
+        dispatcher.utter_message(text=message)
 
         return []
