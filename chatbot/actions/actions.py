@@ -1,30 +1,47 @@
-# This files contains your custom actions which can be used to run
-# custom Python code.
-#
-# See this guide on how to implement these action:
-# https://rasa.com/docs/rasa/custom-actions
-
-
-# This is a simple example for a custom action which utters "Hello World!"
-
 from typing import Any, Text, Dict, List
 import requests
+import json
+from pathlib import Path
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-#
-#
-# class ActionHelloWorld(Action):
-#
-#     def name(self) -> Text:
-#         return "action_hello_world"
-#
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#
-#         dispatcher.utter_message(text="Hello World!")
-#
-#         return []
+
+class ActionStudyPrograms(Action):
+
+    def name(self) -> Text:
+        return "action_study_programs"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        bachelor_degree = next(tracker.get_latest_entity_values('bachelor_degree'), None)
+        master_degree = next(tracker.get_latest_entity_values('master_degree'), None)
+        doctor_degree = next(tracker.get_latest_entity_values('doctor_degree'), None)
+
+        STUDY_PROGRAMS_LOCATION_EN = Path(Path(__file__).resolve().parent, '..', '..', 'sources', 'programs_en.json')
+
+        with STUDY_PROGRAMS_LOCATION_EN.open(mode='r') as f:
+            json_dict = json.load(f)
+
+        print(bachelor_degree)
+        print(master_degree)
+        print(doctor_degree)
+
+        if all([bachelor_degree is None, master_degree is None, doctor_degree is None]):
+            message = f"FIS currently offers following programs: \nBachelor: {json_dict['bachelor']}\n" + f"Master: {json_dict['master']}\n" + f"PhD: {json_dict['doctor']}\n"
+        else:
+            message = ''
+            if bachelor_degree is not None:
+                message = f'For Bachelor students FIS currently offers following programs:\n {json_dict["bachelor"]}'
+            if master_degree is not None:
+                message = f'For Master students FIS currently offers following programs:\n {json_dict["master"]}'
+            if doctor_degree is not None:
+                message = f'For PhD students FIS currently offers following programs:\n {json_dict["doctor"]}'
+
+        dispatcher.utter_message(text=message)
+
+        return []
+
 
 class ActionGetHoliday(Action):
 

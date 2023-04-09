@@ -2,6 +2,7 @@ version: "3.1"
 
 actions:
   - action_get_holiday
+  - action_study_programs
 
 intents:
   - greet
@@ -10,9 +11,13 @@ intents:
   - deny
   - mood_great
   - mood_unhappy
-  - bot_challenge
-  - study_program
+  - study_programs
   - holiday
+
+entities:
+  - bachelor_degree
+  - master_degree
+  - doctor_degree
 
 responses:
   utter_greet:
@@ -20,6 +25,7 @@ responses:
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"
+    # TODO: customize
     image: "https://i.imgur.com/nGF1K8f.jpg"
 
   utter_did_that_help:
@@ -34,8 +40,6 @@ responses:
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
 
-  utter_holiday:
-    - text: "Dneska ma svatek ..."
 
 
 

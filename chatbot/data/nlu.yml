@@ -89,15 +89,39 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
-    
 
-- intent: study_program
+- intent: study_programs
   examples: |
-    - what English programs can I study?
-    - what are bachelor programs?
-    - what are master programs?
-    - what english programs you have on fis?
+    - what English [BSc](bachelor_degree) programs can I study?
+    - what are [BSc.](bachelor_degree) programs?
+    - what are [bachelor](bachelor_degree) programs?
+    - which programs do you have for [bachelor](bachelor_degree) student?
+    - what [Msc.](master_degree) programs does FIS offer?
+    - what english programs you have on fis for [Master](master_degree) degree?
+    - are there any [doctor](doctor_degree) degrees?
 
 - intent: holiday
   examples: |
-    - whose holiday is today?
+    - who's holiday is today?
+
+- lookup: bachelor_degree
+  examples: |
+    - bachelor
+    - BSc
+    - Bc
+    - undergraduate
+
+- lookup: master_degree
+  examples: |
+    - master
+    - MSc
+    - Mgr
+    - magistr
+    - postgraduate
+
+- lookup: doctor_degree
+  examples: |
+    - doctorate
+    - doctor
+    - doctoral
+    - PhD

@@ -35,3 +35,12 @@ stories:
   - action: utter_greet
   - intent: holiday
   - action: action_get_holiday
+
+
+- story: get study programs
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: study_programs
+  - action: action_study_programs
+

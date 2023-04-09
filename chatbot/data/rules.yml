@@ -7,12 +7,14 @@ rules:
   - intent: goodbye
   - action: utter_goodbye
 
-- rule: Say 'I am a bot' anytime the user challenges
+- rule: Get study programs
   steps:
-  - intent: bot_challenge
-  - action: utter_iamabot
+  - intent: study_programs
+  - action: action_study_programs
 
 - rule: Get holiday when user asks
   steps:
   - intent: holiday
   - action: action_get_holiday
+
+
