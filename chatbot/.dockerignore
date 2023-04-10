@@ -1,5 +1,4 @@
-venv/
-chatbot/.rasa/
-chatbot/models/
-README.md
-.gitignore
+venv
+.rasa
+models
+Dockerfile
