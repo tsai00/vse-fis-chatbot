@@ -1,3 +1,6 @@
 venv
 .idea
-.rasa
+chatbot/.rasa
+chatbot/.config
+chatbot/.keras
+models
