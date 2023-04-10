@@ -1,0 +1,34 @@
+version: "3"
+
+
+services:
+  web_demo:
+    restart: always
+    build:
+      context: ./frontend
+    ports:
+      - "8050:80"
+    volumes:
+      - ${PWD}/frontend/index.html:/var/www/html/index.html
+    depends_on:
+      - chatbot
+      - chatbot_actions
+
+  chatbot:
+    restart: always
+    build:
+      context: ./chatbot
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./chatbot:/app
+
+  chatbot_actions:
+    restart: always
+    build:
+      context: ./chatbot/actions
+    ports:
+      - "5055:5055"
+    volumes:
+      - ./chatbot/actions:/app/actions
+      - ./chatbot/data:/app/data

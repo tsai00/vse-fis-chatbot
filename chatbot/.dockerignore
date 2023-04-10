@@ -1,0 +1,5 @@
+venv/
+chatbot/.rasa/
+chatbot/models/
+README.md
+.gitignore

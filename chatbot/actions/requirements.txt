@@ -1,0 +1,4 @@
+requests
+pandas
+polyglot
+pycld2
