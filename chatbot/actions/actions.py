@@ -53,7 +53,7 @@ class ActionStudyPrograms(Action):
         master_degree = next(tracker.get_latest_entity_values('master_degree'), None)
         doctor_degree = next(tracker.get_latest_entity_values('doctor_degree'), None)
 
-        study_programs_file = Path(Path(__file__).resolve().parent, '..', '..', 'sources', f'programs_{language}.json')
+        study_programs_file = Path(Path(__file__).resolve().parent, 'sources', f'programs_{language}.json')
 
         with study_programs_file.open(mode='r') as f:
             json_dict = json.load(f)
