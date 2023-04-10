@@ -1,0 +1,71 @@
+version: "3.1"
+
+actions:
+  - action_get_holiday
+  - action_study_programs
+  - action_detect_language
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - study_programs
+  - holiday
+
+entities:
+  - bachelor_degree
+  - master_degree
+  - doctor_degree
+
+slots:
+  langcode:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+  langname:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+responses:
+  utter_greet:
+  - condition:
+      - type: slot
+        name: langcode
+        value: en
+    text: "Hey! How are you?"
+
+  - condition:
+      - type: slot
+        name: langcode
+        value: cs
+    text: "Ahoj! Jak se máš?"
+
+  utter_cheer_up:
+  - text: "Here is something to cheer you up:"
+    # TODO: customize
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great, carry on!"
+
+  utter_goodbye:
+  - text: "Bye"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+
+
+
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

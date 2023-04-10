@@ -1,0 +1,6 @@
+venv
+.idea
+chatbot/.rasa
+chatbot/.config
+chatbot/.keras
+models
