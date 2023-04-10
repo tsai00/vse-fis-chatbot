@@ -2,7 +2,7 @@ FROM rasa/rasa-sdk:3.5.0
 
 USER root
 RUN apt-get update -qq && \
-    apt-get install -y python3-icu pkg-config libicu-dev python3-dev build-essential && \
+    apt-get install -y python3-icu pkg-config libicu-dev build-essential && \
     apt-get clean
 
 WORKDIR /app
