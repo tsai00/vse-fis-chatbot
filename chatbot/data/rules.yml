@@ -19,4 +19,10 @@ rules:
   - action: action_detect_language
   - action: action_get_holiday
 
+- rule: Get canteen menu when user asks
+  steps:
+  - intent: canteen_menu
+  - action: action_detect_language
+  - action: action_get_canteen_menu
+
 

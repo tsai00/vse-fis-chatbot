@@ -148,3 +148,17 @@ nlu:
   examples: |
     - cs
     - en
+
+- intent: canteen_menu
+  examples: |
+    - co je dneska na oběd?
+    - co mají dneska v menze?
+    - co bude dneska na večeři?
+    - jaká je dnes polévka?
+    - dnešní menu
+    - menu menza
+    - what would be for dinner today?
+    - what they have for lunch today?
+    - menu canteen
+    - today's menu
+    - what's in canteen today?

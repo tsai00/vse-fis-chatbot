@@ -5,6 +5,7 @@ actions:
   - action_study_programs
   - action_detect_language
   - action_intro_message
+  - action_get_canteen_menu
 
 intents:
   - greet
@@ -15,6 +16,7 @@ intents:
   - mood_unhappy
   - study_programs
   - holiday
+  - canteen_menu
 
 entities:
   - bachelor_degree
