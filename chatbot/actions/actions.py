@@ -23,8 +23,8 @@ class ActionDetectLanguage(Action):
             langcode = result.code
             langname = result.name
         except:
-            langcode = 'en'
-            langname = 'English'
+            langcode = 'cz'
+            langname = 'Czech'
 
         if langcode not in ['en', 'cs']:
             dispatcher.utter_message(text=f'Unfortunately I can not speak {langname}, but can only speak English or Czech')
