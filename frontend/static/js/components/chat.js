@@ -240,7 +240,7 @@ async function send(message) {
         $("#userInput").prop("disabled", false);
 
         // if you want the bot to start the conversation after restart
-        // customActionTrigger();
+        customActionTrigger(start_action);
         return;
       }
       setBotResponse(botResponse);
@@ -249,46 +249,13 @@ async function send(message) {
       if (message.toLowerCase() === "/restart") {
         $("#userInput").prop("disabled", false);
         // if you want the bot to start the conversation after the restart action.
-        // actionTrigger();
-        // return;
+        customActionTrigger(start_action);
+        return;
       }
 
       // if there is no response from rasa server, set error bot response
       setBotResponse("");
       console.log("Error from bot end: ", textStatus);
-    },
-  });
-}
-/**
- * sends an event to the bot,
- *  so that bot can start the conversation by greeting the user
- *
- * `Note: this method will only work in Rasa 1.x`
- */
-// eslint-disable-next-line no-unused-vars
-function actionTrigger() {
-  $.ajax({
-    url: `http://localhost:5005/conversations/${sender_id}/execute`,
-    type: "POST",
-    contentType: "application/json",
-    data: JSON.stringify({
-      name: action_name,
-      policy: "MappingPolicy",
-      confidence: "0.98",
-    }),
-    success(botResponse, status) {
-      console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
-
-      if (Object.hasOwnProperty.call(botResponse, "messages")) {
-        setBotResponse(botResponse.messages);
-      }
-      $("#userInput").prop("disabled", false);
-    },
-    error(xhr, textStatus) {
-      // if there is no response from rasa server
-      setBotResponse("");
-      console.log("Error from bot end: ", textStatus);
-      $("#userInput").prop("disabled", false);
     },
   });
 }
@@ -303,15 +270,16 @@ function actionTrigger() {
  * `Note: this method will only work in Rasa 2.x`
  */
 // eslint-disable-next-line no-unused-vars
-function customActionTrigger() {
+function customActionTrigger(action_name) {
   $.ajax({
-    url: "http://localhost:5055/webhook/",
+    url: rasa_actions_server_url,
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({
       next_action: action_name,
       tracker: {
-        sender_id,
+        sender_id: sender_id,
+        conversation_id: "default",
       },
     }),
     success(botResponse, status) {

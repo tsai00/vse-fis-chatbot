@@ -4,6 +4,7 @@ actions:
   - action_get_holiday
   - action_study_programs
   - action_detect_language
+  - action_intro_message
 
 intents:
   - greet

@@ -127,3 +127,26 @@ class ActionGetHoliday(Action):
         dispatcher.utter_message(text=message)
 
         return []
+
+
+class ActionIntroMessage(Action):
+
+    def name(self) -> Text:
+        return "action_intro_message"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        dispatcher.utter_message(text="Ahoj, jsem FISBot, virtuální asistent a rád ti poradím. Napíš, co by tě zajímalo. \n"
+                                      "Mluvím česky a anglicky. Můžeš se přepínat mezi jazyky přímo během konverzace.\n")
+
+        button_resp = [
+            {"title": "Bakalářské studium", "payload": '/study_programs{"bachelor_degree": ' + f'"bachelor"' + '}'},
+            {"title": "Magisterské studium", "payload": '/study_programs{"master_degree": ' + f'"master"' + '}'},
+            {"title": "Doktorské studium", "payload": '/study_programs{"doctor_degree": ' + f'"doctor"' + '}'},
+        ]
+
+        dispatcher.utter_message(text="Nevíš, jak se zeptat? Tady jsme pro tebe připravili nejčastější okruhy otázek.", buttons=button_resp)
+
+        return []

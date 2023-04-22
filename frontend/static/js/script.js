@@ -31,18 +31,18 @@ window.addEventListener('load', () => {
     $("div").removeClass("tap-target-origin");
 
     // drop down menu for close, restart conversation & clear the chats.
-    $(".dropdown-trigger").dropdown();
+    //$(".dropdown-trigger").dropdown();
 
     // initiate the modal for displaying the charts,
     // if you dont have charts, then you comment the below line
-    $(".modal").modal();
+    //$(".modal").modal();
 
     // enable this if u have configured the bot to start the conversation.
-    // showBotTyping();
-    // $("#userInput").prop('disabled', true);
-
+    showBotTyping();
+    $("#userInput").prop('disabled', true);
     // if you want the bot to start the conversation
-    // customActionTrigger();
+    customActionTrigger(start_action);
+    $("#userInput").prop('disabled', false);
   });
   // Toggle the chatbot screen
   $("#profile_div").click(() => {
