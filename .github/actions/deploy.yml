@@ -1,0 +1,29 @@
+name: Deploy chatbot on server
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+
+  build:
+    name: redeploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Copy project and run docker compose
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: cd ~/vse-fis-chatbot  && 
+          echo "Updating project" && 
+          /usr/bin/git reset --hard HEAD && 
+          /usr/bin/git checkout main && 
+          /usr/bin/git pull https://${{ secrets.PAT }}@github.com/ForloopAI/forloop_airflow.git && 
+          echo "Running docker compose down" && 
+          docker compose down && 
+          echo "Running docker compose up" && 
+          docker compose up -d
