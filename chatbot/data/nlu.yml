@@ -143,3 +143,8 @@ nlu:
     - doctoral
     - PhD
     - doktorské
+
+- lookup: langcode
+  examples: |
+    - cs
+    - en
