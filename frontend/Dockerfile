@@ -4,7 +4,7 @@ RUN apt-get update && \
     apache2 apache2-utils
 
 WORKDIR /var/www/html
-COPY index.html .
+COPY . .
 
 EXPOSE 80
 
