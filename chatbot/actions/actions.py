@@ -79,35 +79,35 @@ class ActionStudyPrograms(Action):
         print(master_degree)
         print(doctor_degree)
 
-        bachelor_programs = '\n\u2022' + '\n\u2022 '.join(json_dict['bachelor'])
-        master_programs = '\n\u2022' + '\n\u2022 '.join(json_dict['master'])
-        doctor_programs = '\n\u2022' + '\n\u2022 '.join(json_dict['doctor'])
+        bachelor_programs = '<br> \u2022 ' + '<br> \u2022 '.join(json_dict['bachelor'])
+        master_programs = '<br> \u2022 ' + '<br> \u2022 '.join(json_dict['master'])
+        doctor_programs = '<br> \u2022 ' + '<br> \u2022 '.join(json_dict['doctor'])
 
         print(json_dict['master'])
         print(master_programs)
 
         if all([bachelor_degree is None, master_degree is None, doctor_degree is None]):
             if language == 'cs':
-                message = f"FIS momentálně nabízí následující programy: \nBachelor: {bachelor_programs}\n" + f"Master: {master_programs}\n" + f"PhD: {doctor_programs}\n"
+                message = f"FIS momentálně nabízí následující programy: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
             else:
-                message = f"FIS currently offers following programs: \nBachelor: {bachelor_programs}\n" + f"Master: {master_programs}\n" + f"PhD: {doctor_programs}\n"
+                message = f"FIS currently offers following programs: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
         else:
             message = ''
             if bachelor_degree is not None:
                 if language == 'cs':
-                    message = f'FIS momentálně nabízí následující bakalářské programy:\n {bachelor_programs}'
+                    message = f'FIS momentálně nabízí následující bakalářské programy: <br>{bachelor_programs}'
                 else:
-                    message = f'For Bachelor students FIS currently offers following programs:\n {bachelor_programs}'
+                    message = f'For Bachelor students FIS currently offers following programs: <br>{bachelor_programs}'
             if master_degree is not None:
                 if language == 'cs':
-                    message = f'FIS momentálně nabízí následující magisterské programy:\n {master_programs}'
+                    message = f'FIS momentálně nabízí následující magisterské programy: <br>{master_programs}'
                 else:
-                    message = f'For Master students FIS currently offers following programs:\n {master_programs}'
+                    message = f'For Master students FIS currently offers following programs: <br>{master_programs}'
             if doctor_degree is not None:
                 if language == 'cs':
-                    message = f'FIS momentálně nabízí následující doktorské programy:\n {doctor_programs}'
+                    message = f'FIS momentálně nabízí následující doktorské programy: <br>{doctor_programs}'
                 else:
-                    message = f'For PhD students FIS currently offers following programs:\n {doctor_programs}'
+                    message = f'For PhD students FIS currently offers following programs: <br>{doctor_programs}'
 
         dispatcher.utter_message(text=message)
 
@@ -162,9 +162,9 @@ class ActionIntroMessage(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        dispatcher.utter_message(text="Ahoj, jsem FISBot, virtuální asistent a rád ti poradím. Napíš, co by tě zajímalo. \n"
-                                      "Mluvím česky a anglicky. Můžeš se přepínat mezi jazyky přímo během konverzace.\n"
-                                      "Pamatuj se ale prosím, že se jen učím a nejsem Chat GPT-5 :)")
+        dispatcher.utter_message(text="Ahoj, jsem FISBot, virtuální asistent a rád ti poradím. Napíš, co by tě zajímalo. <br>"
+                                      "Mluvím česky a anglicky. Můžeš se přepínat mezi jazyky přímo během konverzace.<br>"
+                                      "Pamatuj si ale prosím, že se jen učím a nejsem Chat GPT-5 :)")
 
         button_resp = [
             #{"title": "Bakalářské studium", "payload":"/study_programs{/"master_degree/":/"magisterské/"/"slot2/":/"value2/"}},
