@@ -13,14 +13,12 @@ nlu:
     - dobry vecer
     - čus
     - zdravím
-    - zdarvim
-    - 
+    - zdravim
     - hello
     - hi
     - hello there
     - good morning
     - good evening
-    - moin
     - hey there
     - let's go
     - hey dude
@@ -112,7 +110,7 @@ nlu:
     - are there any [doctor](doctor_degree) degrees?
     - what about [PhD](doctor_degree) programs?
     - jaké [magisterské](master_degree) programy máte?
-    - které [bakalářské](bachelor) programy jsou na FISu?
+    - které [bakalářské](bachelor_degree) programy jsou na FISu?
     - máte i [doktorské](doctor_degree) programy?
     
 
@@ -127,6 +125,7 @@ nlu:
     - BSc
     - Bc
     - undergraduate
+    - bakalářské
 
 - lookup: master_degree
   examples: |
@@ -134,6 +133,7 @@ nlu:
     - MSc
     - Mgr
     - magistr
+    - magisterské
     - postgraduate
 
 - lookup: doctor_degree
@@ -142,3 +142,9 @@ nlu:
     - doctor
     - doctoral
     - PhD
+    - doktorské
+
+- lookup: langcode
+  examples: |
+    - cs
+    - en

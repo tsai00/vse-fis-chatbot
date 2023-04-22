@@ -4,6 +4,7 @@ actions:
   - action_get_holiday
   - action_study_programs
   - action_detect_language
+  - action_intro_message
 
 intents:
   - greet
@@ -19,13 +20,15 @@ entities:
   - bachelor_degree
   - master_degree
   - doctor_degree
+  - langcode
 
 slots:
   langcode:
     type: text
     influence_conversation: false
     mappings:
-      - type: custom
+      - type: from_entity
+        entity: langcode
   langname:
     type: text
     influence_conversation: false
@@ -34,17 +37,17 @@ slots:
 
 responses:
   utter_greet:
-  - condition:
-      - type: slot
-        name: langcode
-        value: en
-    text: "Hey! How are you?"
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Hey! How are you?"
 
-  - condition:
-      - type: slot
-        name: langcode
-        value: cs
-    text: "Ahoj! Jak se máš?"
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Ahoj! Jak se máš?"
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"
