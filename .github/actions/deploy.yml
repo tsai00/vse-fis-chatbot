@@ -22,7 +22,7 @@ jobs:
           echo "Updating project" && 
           /usr/bin/git reset --hard HEAD && 
           /usr/bin/git checkout main && 
-          /usr/bin/git pull https://${{ secrets.PAT }}@github.com/ForloopAI/forloop_airflow.git && 
+          /usr/bin/git pull https://${{ secrets.PAT }}@github.com/tsai00/vse-fis-chatbot.git && 
           echo "Running docker compose down" && 
           docker compose down && 
           echo "Running docker compose up" && 
