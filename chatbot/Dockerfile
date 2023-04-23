@@ -4,7 +4,7 @@ WORKDIR /app
 USER root
 COPY . /app
 
-RUN sed -i 's/localhost:5055/chatbot_actions:5055/g' endpoints.yml
+RUN sed -i 's/localhost:5055/chatbot_actions:5055/g' /app/endpoints.yml
 
 RUN rasa train
 
