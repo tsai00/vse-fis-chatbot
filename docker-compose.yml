@@ -8,8 +8,8 @@ services:
       context: ./frontend
       args:
         HOST_IP: ${HOST_IP}
-#    ports:
-#      - "8050:80"
+    ports:
+      - "8050:80"
     volumes:
       - ${PWD}/frontend/index.html:/var/www/html/index.html
     env_file:
@@ -22,8 +22,8 @@ services:
     restart: always
     build:
       context: ./chatbot
-#    ports:
-#      - "5006:5005"
+    ports:
+      - "5006:5005"
     volumes:
       - ./chatbot:/app
 
@@ -31,8 +31,8 @@ services:
     restart: always
     build:
       context: ./chatbot/actions
-#    ports:
-#      - "5056:5055"
+    ports:
+      - "5056:5055"
     volumes:
       - ./chatbot/actions:/app/actions
       - ./chatbot/data:/app/data
