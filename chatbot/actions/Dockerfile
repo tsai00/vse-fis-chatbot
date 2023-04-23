@@ -13,7 +13,4 @@ RUN pip install --no-binary=:pyicu: pyicu   # Due to the errors with installing 
 
 COPY . .
 
-
 EXPOSE 5055
-
-USER 1001
