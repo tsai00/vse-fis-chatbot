@@ -11,6 +11,7 @@ services:
     volumes:
       - ${PWD}/frontend/index.html:/var/www/html/index.html
       - ./frontend/static:/var/www/html/static
+      - ${PWD}/frontend/static/js/constants-tmp.js:/var/www/html/frontend/static/js/constants.js
     env_file:
       - .env
     depends_on:
