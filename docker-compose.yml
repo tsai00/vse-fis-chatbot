@@ -29,9 +29,6 @@ services:
     restart: always
     build:
       context: ./chatbot/actions
-    volumes:
-      - ./chatbot/actions:/app/actions
-      - ./chatbot/data:/app/data
 
   reverse_proxy:
     container_name: reverse_proxy
