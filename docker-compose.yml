@@ -10,6 +10,7 @@ services:
         HOST_IP: ${HOST_IP}
     volumes:
       - ${PWD}/frontend/index.html:/var/www/html/index.html
+      - ./static:/var/www/html/static
     env_file:
       - .env
     depends_on:
@@ -22,8 +23,6 @@ services:
       context: ./chatbot
       args:
         HOST_IP: ${HOST_IP}
-    volumes:
-      - ./chatbot:/app
     env_file:
       - .env
 
