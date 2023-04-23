@@ -144,10 +144,10 @@ nlu:
     - PhD
     - doktorské
 
-- lookup: langcode
+- lookup: language
   examples: |
-    - cs
-    - en
+    - Czech
+    - English
 
 - intent: canteen_menu
   examples: |

@@ -22,20 +22,25 @@ entities:
   - bachelor_degree
   - master_degree
   - doctor_degree
-  - langcode
+  - language
 
 slots:
   langcode:
     type: text
-    influence_conversation: false
-    mappings:
-      - type: from_entity
-        entity: langcode
-  langname:
-    type: text
-    influence_conversation: false
+    influence_conversation: true
     mappings:
       - type: custom
+  langname:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
+  language:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: language
 
 responses:
   utter_greet:

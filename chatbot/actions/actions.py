@@ -12,12 +12,6 @@ from rasa_sdk.events import SlotSet
 from polyglot.detect import Detector
 
 
-LANGUAGES = {
-    'cs': 'Czech',
-    'en': 'English'
-}
-
-
 class ActionDetectLanguage(Action):
     def name(self) -> Text:
         return "action_detect_language"
@@ -26,13 +20,18 @@ class ActionDetectLanguage(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        languages = {
+            'Czech': 'cs',
+            'English': 'en'
+        }
+
         text = tracker.latest_message.get('text')
-        langcode = tracker.get_slot('langcode')     # Language might be already set (e.g. in payload)
-        print(langcode)
 
-        if langcode is None:
-            print(text)
+        # Additional entity "language" is used, so not to overwrite langname / langcode
+        language = tracker.get_slot('language')
 
+        # Language might be already set (e.g. in payload)
+        if language is None:
             try:
                 result = Detector(text).language
                 langcode = result.code
@@ -41,7 +40,8 @@ class ActionDetectLanguage(Action):
                 langcode = 'cs'
                 langname = 'Czech'
         else:
-            langname = LANGUAGES.get(langcode)
+            langcode = languages.get(language)
+            langname = language
 
         if langcode not in ['en', 'cs']:
             dispatcher.utter_message(
@@ -49,7 +49,7 @@ class ActionDetectLanguage(Action):
 
         print(langname)
 
-        return [SlotSet("langcode", langcode), SlotSet("langname", langname)]
+        return [SlotSet("langcode", langcode), SlotSet("langname", langname), SlotSet("language", None)]
 
 
 class ActionStudyPrograms(Action):
@@ -167,9 +167,9 @@ class ActionIntroMessage(Action):
                                       "Pamatuj si ale prosím, že se jen učím a nejsem Chat GPT-5 :)")
 
         button_resp = [
-            #{"title": "Bakalářské studium", "payload":"/study_programs{/"master_degree/":/"magisterské/"/"slot2/":/"value2/"}},
-            {"title": "Magisterské studium", "payload": '/study_programs{"master_degree": "magisterské", "langcode": "cs"}'},
-            {"title": "Doktorské studium", "payload": '/study_programs{"langcode": ' + f'"cs"' + '}'},
+            {"title": "Bakalářské studium", "payload": '/study_programs{"bachelor_degree": "bakalářské", "language": "Czech"}'},
+            {"title": "Magisterské studium", "payload": '/study_programs{"master_degree": "magisterské", "language": "Czech"}'},
+            {"title": "Doktorské studium", "payload": '/study_programs{"doctor_degree": "doktorksé", "language": "Czech"}'},
         ]
 
         dispatcher.utter_message(text="Nevíš, jak se zeptat? Tady jsme pro tebe připravili nejčastější okruhy otázek.", buttons=button_resp)
