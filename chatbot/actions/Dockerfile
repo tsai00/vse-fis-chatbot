@@ -6,11 +6,13 @@ RUN apt-get update -qq && \
     apt-get clean
 
 WORKDIR /app
-COPY requirements.txt requirements.txt
-COPY . .
 
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 RUN pip install --no-binary=:pyicu: pyicu   # Due to the errors with installing pyicu on linux
+
+COPY . .
+
 
 EXPOSE 5055
 
