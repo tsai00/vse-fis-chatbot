@@ -12,4 +12,4 @@ RUN rasa train
 
 EXPOSE 5005
 
-CMD ["run", "-m", "/app/models", "--enable-api", "--cors", "*", "--debug", "--endpoints", "endpoints.yml", "--log-file", "out.log", "--debug"]
+CMD ["run", "-m", "/app/models", "--enable-api", "--cors", "*", "--debug", "--endpoints", "/app/endpoints.yml", "--log-file", "out.log", "--debug"]
