@@ -20,10 +20,12 @@ services:
     restart: always
     build:
       context: ./chatbot
-    ports:
-      - "5006:5005"
+      args:
+        HOST_IP: ${HOST_IP}
     volumes:
       - ./chatbot:/app
+    env_file:
+      - .env
 
   chatbot_actions:
     restart: always
