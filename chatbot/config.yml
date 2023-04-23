@@ -18,6 +18,9 @@ pipeline:
      epochs: 100
    - name: RegexEntityExtractor
      use_lookup_tables: True
+   - name: FallbackClassifier
+     threshold: 0.7
+     ambiguity_threshold: 0.1
 #     constrain_similarities: true
 #   - name: EntitySynonymMapper
 #   - name: ResponseSelector

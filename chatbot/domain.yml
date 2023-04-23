@@ -6,6 +6,8 @@ actions:
   - action_detect_language
   - action_intro_message
   - action_get_canteen_menu
+  - action_default_fallback
+  - action_default_ask_affirmation
 
 intents:
   - greet
@@ -43,6 +45,19 @@ slots:
         entity: language
 
 responses:
+  utter_ask_rephrase:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Sorry I didn't get that. Can you please rephrase?"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Promiň, nechápu co tím mýslíš. Mohl bys prosím parafrázovat?"
+
   utter_greet:
     - condition:
         - type: slot

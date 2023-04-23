@@ -45,7 +45,7 @@ class ActionDetectLanguage(Action):
 
         if langcode not in ['en', 'cs']:
             dispatcher.utter_message(
-                text=f'Unfortunately I can not speak {langcode}, but can only speak English or Czech')
+                text=f'Unfortunately I don\'t speak {langcode}, can only speak English or Czech')
 
         print(langname)
 
@@ -177,6 +177,107 @@ class ActionIntroMessage(Action):
         return []
 
 
+class ActionDefaultAskAffirmation(Action):
+    def name(self):
+        return "action_default_ask_affirmation"
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]):
+
+        language = tracker.get_slot('langcode')
+
+        if language not in ['en', 'cs']:
+            language = 'cs'
+
+        # Select top 3 intents from the tracker + skip 1st one (nlu fallback)
+        predicted_intents = tracker.latest_message["intent_ranking"][1:4]
+
+        if language == 'cs':
+            # Show user-friendly translation of most popular intents
+            intent_mappings = {
+                "study_programs": "Studijní programy",
+                "holiday": "Kdo má svátek dneska?",
+                "canteen_menu": "Jidelníček na dnes",
+            }
+
+            message = "Promiň, nerozumím ti. Máš na mýsli něco z tohohle?"
+        else:
+            # Show user-friendly translation of most popular intents
+            intent_mappings = {
+                "study_programs": "Study programs",
+                "holiday": "Who has holiday today?",
+                "canteen_menu": "Canteen menu",
+            }
+
+            message = "Sorry, can not understand you. What do you want to do?"
+
+        default_button_titles = {
+            'cs': 'Jiné',
+            'en': 'Other'
+        }
+
+        out_of_scope_path = f'out_of_scope{{"language": "{"Czech" if language == "cs" else "English"}"}}'
+        buttons_all = [
+            {
+                "title": intent_mappings.get(intent['name'], default_button_titles[language]),
+                "payload": f"/{intent['name'] if intent_mappings.get(intent['name'], default_button_titles[language]) not in default_button_titles.values() else out_of_scope_path}"
+            }
+            for intent in predicted_intents
+        ]
+
+        # Keep unique buttons (based on title) only
+        buttons_unique = list({v['title']: v for v in buttons_all}.values())
+
+        buttons_sorted = []
+        button_default = None
+
+        # Ensure default button is last
+        for button in buttons_unique:
+            if button['title'] in default_button_titles.values():
+                button_default = button
+            else:
+                buttons_sorted.append(button)
+
+        buttons_sorted.append(button_default)
+
+        dispatcher.utter_message(text=message, buttons=buttons_sorted)
+
+        return []
+
+
+class ActionDefaultFallback(Action):
+    def name(self) -> Text:
+        return "action_default_fallback"
+
+    def run(self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        language = tracker.get_slot('langcode')
+
+        if language not in ['en', 'cs']:
+            language = 'cs'
+
+        if language == 'cs':
+            message = f"Promiň, ale s tímhle ti pomoct nemůžu. Zkus se prosím obratit na studijní oddělení: <br>" \
+                      f"\u2022 Bakalářské studium: jana.hudcekova@vse.cz, sedlacko@vse.cz <br>" \
+                      f"\u2022 Magisterské studium:  iva.hudcova@vse.cz, veronika.brunerova@vse.cz <br>" \
+                      f"\u2022 Doktorské studium: tereza.krajickova@vse.cz<br>"
+        else:
+            message = f"I'm sorry, I can't help you with that. Please contact student office: <br>" \
+                      f"\u2022 Bachelor studies: jana.hudcekova@vse.cz, sedlacko@vse.cz <br>" \
+                      f"\u2022 Master studies:  iva.hudcova@vse.cz, veronika.brunerova@vse.cz <br>" \
+                      f"\u2022 Doctoral studies: tereza.krajickova@vse.cz <br>"
+
+        # tell the user they are being passed to a customer service agent
+        dispatcher.utter_message(text=message)
+
+        # pause the tracker so that the bot stops responding to user input
+        return [ConversationPaused(), UserUtteranceReverted()]
+
+
 class ActionGetCanteenMenu(Action):
     def _get_menu(self):
         headers = {
@@ -192,7 +293,6 @@ class ActionGetCanteenMenu(Action):
         }
 
         today = f'{datetime.datetime.now():%Y-%m-%d}'
-        today = '2023-04-24'
         canteen_menu_url = f'https://webkredit.vse.cz/webkredit_italska/Api/Ordering/Menu?Dates={today}T00%3A00%3A00.000Z&CanteenId=1'
         try:
             response = requests.get(canteen_menu_url, headers=headers)
