@@ -6,9 +6,9 @@ WORKDIR /app
 USER root
 COPY . /app
 
-RUN sed -i "s,http://localhost:5055/webhook,http://$HOST_IP:8080/chatbot-actions,g" /app/endpoints.yml
-
 RUN rasa train
+
+RUN sed -i "s,http://localhost:5055/webhook,http://$HOST_IP:8080/chatbot-actions,g" /app/endpoints.yml
 
 EXPOSE 5005
 
