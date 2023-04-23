@@ -6,10 +6,12 @@ services:
     restart: always
     build:
       context: ./frontend
-    ports:
-      - "8050:80"
+      args:
+        HOST_IP: ${HOST_IP}
     volumes:
       - ${PWD}/frontend/index.html:/var/www/html/index.html
+    env_file:
+      - .env
     depends_on:
       - chatbot
       - chatbot_actions
@@ -18,17 +20,28 @@ services:
     restart: always
     build:
       context: ./chatbot
-    ports:
-      - "5005:5005"
-    volumes:
-      - ./chatbot:/app
+      args:
+        HOST_IP: ${HOST_IP}
+    env_file:
+      - .env
 
   chatbot_actions:
     restart: always
     build:
       context: ./chatbot/actions
-    ports:
-      - "5055:5055"
     volumes:
       - ./chatbot/actions:/app/actions
       - ./chatbot/data:/app/data
+
+  reverse_proxy:
+    container_name: reverse_proxy
+    restart: always
+    image: nginx:alpine
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - chatbot
+      - chatbot_actions
+      - web_demo

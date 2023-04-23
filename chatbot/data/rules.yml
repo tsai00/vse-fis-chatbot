@@ -19,4 +19,29 @@ rules:
   - action: action_detect_language
   - action: action_get_holiday
 
+- rule: Get canteen menu when user asks
+  steps:
+  - intent: canteen_menu
+  - action: action_detect_language
+  - action: action_get_canteen_menu
+
+- rule: Show accommodation info
+  steps:
+  - intent: accommodation
+  - action: action_detect_language
+  - action: utter_accommodation
+
+- rule: Single stage fallback -> ask user for confirmation
+  steps:
+  - intent: nlu_fallback
+  - action: action_detect_language
+  - action: action_default_ask_affirmation
+
+- rule: Single stage fallback -> default fallback
+  steps:
+  - action: action_default_ask_affirmation
+  - intent: out_of_scope
+  - action: action_detect_language
+  - action: action_default_fallback
+
 

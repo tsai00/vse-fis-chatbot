@@ -144,7 +144,64 @@ nlu:
     - PhD
     - doktorské
 
-- lookup: langcode
+- lookup: language
   examples: |
-    - cs
-    - en
+    - Czech
+    - English
+
+- intent: canteen_menu
+  examples: |
+    - co je dneska na oběd?
+    - co mají dneska v menze?
+    - co bude dneska na večeři?
+    - Co je dneska k obědu?
+    - jaká je dnes polévka?
+    - dnešní menu
+    - Co bude k obědu?
+    - Oběd
+    - Jídlo
+    - Menza
+    - Jídelní lístek
+    - Večeře
+    - Co bude dnes k obědu?
+    - kde si mohu nastavit obed
+    - výběr jídel k obědu
+    - menzq
+    - Menza
+    - menu menza
+    - what would be for dinner today?
+    - what they have for lunch today?
+    - menu canteen
+    - today's menu
+    - what's in canteen today?
+    
+
+- intent: accommodation
+  examples: |
+    - kolik stojí kolej?
+    - kde se nachází kolej?
+    - má vše koleje?
+    - letní ubytování
+    - ubytování vše
+    - Koleje
+    - Ubytování
+    - kde si zařídit kolej
+    - ubytování pro studenty
+    - koleje pro studenty
+    - informace ohledně kolej
+    - info k ubytování na kolejích
+    - jak zjistím, jestli je na kolejích volno
+    - je na kolejích ještě místo
+    - dormitory
+    - how much does room cost?
+    - can I rent a room for summer?
+    - how to apply for room in dorm?
+    - Dorm
+    - rooms for students
+    - dorm info
+    - information about dormitory
+    - are there any available rooms in dormitory?
+    - accommodation
+    - student accommodation
+    - accommodation for students
+    

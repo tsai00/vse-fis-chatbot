@@ -36,23 +36,23 @@ stories:
 #  - intent: deny
 #  - action: action_detect_language
 #  - action: utter_goodbye
-
-- story: get holiday
-  steps:
-  - intent: greet
-  - action: action_detect_language
-  - action: utter_greet
-  - intent: holiday
-  - action: action_detect_language
-  - action: action_get_holiday
-
-
-- story: get study programs
-  steps:
-  - intent: greet
-  - action: action_detect_language
-  - action: utter_greet
-  - intent: study_programs
-  - action: action_detect_language
-  - action: action_study_programs
+#
+#- story: get holiday
+#  steps:
+#  - intent: greet
+#  - action: action_detect_language
+#  - action: utter_greet
+#  - intent: holiday
+#  - action: action_detect_language
+#  - action: action_get_holiday
+#
+#
+#- story: get study programs
+#  steps:
+#  - intent: greet
+#  - action: action_detect_language
+#  - action: utter_greet
+#  - intent: study_programs
+#  - action: action_detect_language
+#  - action: action_study_programs
 

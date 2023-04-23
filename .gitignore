@@ -4,3 +4,5 @@ chatbot/.rasa
 chatbot/.config
 chatbot/.keras
 models
+chatbot/*.log
+.env

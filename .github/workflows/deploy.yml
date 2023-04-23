@@ -20,10 +20,10 @@ jobs:
         port: ${{ secrets.PORT }}
         script: cd ~/vse-fis-chatbot  && 
           echo "Updating project" && 
-          /usr/bin/git reset --hard HEAD && 
           /usr/bin/git checkout main && 
           /usr/bin/git pull https://${{ secrets.PAT }}@github.com/tsai00/vse-fis-chatbot.git && 
+          /usr/bin/git reset --hard HEAD && 
           echo "Running docker compose down" && 
           docker compose down && 
           echo "Running docker compose up" && 
-          docker compose up -d
+          docker compose up --build -d
