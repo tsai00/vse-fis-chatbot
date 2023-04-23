@@ -19,6 +19,7 @@ intents:
   - study_programs
   - holiday
   - canteen_menu
+  - accommodation
 
 entities:
   - bachelor_degree
@@ -87,6 +88,39 @@ responses:
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+
+  utter_accommodation:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "The Jarov dormitory is available for international students (as well as for Czech students) – approximately 
+             15 minutes from the university (by tram). VŠE guarantees a place at the university dormitory for all the 
+             international students. International students are most commonly accommodated at Palachova dormitory and 
+             Jarov II  (5 Minutes far away from the Palachova dormitory). 
+             <br><br>The prices for the accomodation:
+             - standard shared room (double-bed room in a unit with two rooms – together 4 students in one unit, shared kitchen and bathroom) – 8-12 EUR per night
+             - comfort single room (single room in a unit with two rooms – together 2 students in one unit, shared kitchen and bathroom) – 10-20 EUR per night
+            
+             <br><br>Detailed price list see here: https://accommodation.vse.cz/students-accommodation/documents/price-list-of-accommodation/#cenik-22-10
+             <br>You can apply in advance only. Applications will be open in June, to finish the application is necessary to pay a deposit in amount of 5.000 CZK (200 EUR).  Then the communication proceeds with the Dormitory management.
+             Moving in to rooms is possible usually from the second week in September."
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text:  "Studenti, kteří nepocházejí z Prahy, mohou zažádat o bydlení na koleji. Vysoká škola ekonomická v Praze 
+              disponuje několika budovami, které se nacházejí po celém hlavním města. 
+              Studentům prvních ročníků se doporučuje bydlet v areálu Jižního Města, kde probíhá i většina výuky 
+              prvních ročníků. Starší studenti mohou vyhledat areál na Jarově nebo Rooseveltovu kolej v Holešovicích.
+
+              <br><br>Koleje jsou vybaveny posilovnami, v tělocvičnách probíhají zájmové aktivity jako zumba, joga 
+              nebo pilates. Na Jarově probíhá každoročně Jarov liga v malé kopané. Pokud rádi běháte, ale nemáte ještě 
+              na ekonomce žádného parťáka, můžete se přidat k Jarovským běžcům. Na Rooseveltově koleji se lze zapsat 
+              do ochotnického divadla.
+              
+              <br><br>Ceny na kolej se dozvíš tady: https://suz.vse.cz/zajemci-o-ubytovani/dokumenty/cenik-kolejneho/"
 
 
 
