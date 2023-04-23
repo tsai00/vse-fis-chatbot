@@ -313,9 +313,11 @@ class ActionGetCanteenMenu(Action):
 
         todays_menu = self._get_menu()
 
-        menu_df = pd.DataFrame(todays_menu)
-
-        menu_df['mealName'] = menu_df.apply(lambda x: [x['rows'][i]['item']['mealName'] for i in range(len(x['rows']))], axis=1)
+        try:
+            menu_df = pd.DataFrame(todays_menu)
+            menu_df['mealName'] = menu_df.apply(lambda x: [x['rows'][i]['item']['mealName'] for i in range(len(x['rows']))], axis=1)
+        except:
+            todays_menu = ''
 
         if todays_menu:
             message = ''
