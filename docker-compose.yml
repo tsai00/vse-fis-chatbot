@@ -10,8 +10,6 @@ services:
         HOST_IP: ${HOST_IP}
     volumes:
       - ${PWD}/frontend/index.html:/var/www/html/index.html
-      - ./frontend/static:/var/www/html/static
-      - /dev/null:/var/www/html/frontend/static/js/constants.js
     env_file:
       - .env
     depends_on:
