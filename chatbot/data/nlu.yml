@@ -205,3 +205,17 @@ nlu:
     - student accommodation
     - accommodation for students
     
+
+- intent: student_unity
+  examples: |
+    - Co je 4FIS?
+    - Co jsou Kruhy?
+    - Mohu se stát 4FISákem?
+    - Jaké akce pořádá 4FIS?
+    - Máte studentské spolky?
+    - Pořádá 4FIS seznamovák?
+    - What is 4FIS?
+    - What is "Kruhy"?
+    - Can I become a member of 4FIS?
+    - What events does 4FIS organize?
+    - Does 4FIS run an orientation week?

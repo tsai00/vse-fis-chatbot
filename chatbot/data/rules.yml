@@ -31,6 +31,12 @@ rules:
   - action: action_detect_language
   - action: utter_accommodation
 
+- rule: Show info about student unity
+  steps:
+  - intent: student_unity
+  - action: action_detect_language
+  - action: utter_student_unity
+
 - rule: Single stage fallback -> ask user for confirmation
   steps:
   - intent: nlu_fallback
