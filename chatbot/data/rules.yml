@@ -2,9 +2,16 @@ version: "3.1"
 
 rules:
 
+- rule: Say hi anytime the user says hi
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+
 - rule: Say goodbye anytime the user says goodbye
   steps:
   - intent: goodbye
+  - action: action_detect_language
   - action: utter_goodbye
 
 - rule: Get study programs
@@ -50,4 +57,29 @@ rules:
   - action: action_detect_language
   - action: action_default_fallback
 
+- rule: Activate form
+  steps:
+  - intent: consulting_hours
+  - action: action_detect_language
+  - action: professor_form
+  - active_loop: professor_form
 
+- rule: Submit form
+  condition:
+  # Condition that form is active.
+  - active_loop: professor_form
+  steps:
+  # Form is deactivated
+  - action: professor_form
+  - active_loop: null
+  - slot_was_set:
+      - requested_slot: null
+  # The actions we want to run when the form is submitted.
+  - action: utter_confirm_professor_name_slot_value
+  - action: action_detect_language
+  - action: action_get_consulting_hours
+
+- rule: Manually trigger action_get_consulting_hours
+  steps:
+  - intent: trigger_action_get_consulting_hours
+  - action: action_get_consulting_hours

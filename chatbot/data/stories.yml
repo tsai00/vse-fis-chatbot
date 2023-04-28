@@ -2,14 +2,14 @@ version: "3.1"
 
 stories:
 
-#- story: happy path
-#  steps:
-#  - intent: greet
-#  - action: action_detect_language
-#  - action: utter_greet
-#  - intent: mood_great
-#  - action: action_detect_language
-#  - action: utter_happy
+- story: happy path
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: mood_great
+  - action: action_detect_language
+  - action: utter_happy
 #
 #- story: sad path 1
 #  steps:
@@ -37,22 +37,72 @@ stories:
 #  - action: action_detect_language
 #  - action: utter_goodbye
 #
-#- story: get holiday
-#  steps:
-#  - intent: greet
-#  - action: action_detect_language
-#  - action: utter_greet
-#  - intent: holiday
-#  - action: action_detect_language
-#  - action: action_get_holiday
-#
-#
-#- story: get study programs
-#  steps:
-#  - intent: greet
-#  - action: action_detect_language
-#  - action: utter_greet
-#  - intent: study_programs
-#  - action: action_detect_language
-#  - action: action_study_programs
+- story: get holiday
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: holiday
+  - action: action_detect_language
+  - action: action_get_holiday
 
+
+- story: provide with canteen menu
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: canteen_menu
+  - action: action_detect_language
+  - action: action_get_canteen_menu
+
+
+- story: provide with accommodation info
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: accommodation
+  - action: action_detect_language
+  - action: utter_accommodation
+
+
+- story: provide with student unity info
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: student_unity
+  - action: action_detect_language
+  - action: utter_student_unity
+
+
+- story: get study programs
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: study_programs
+  - action: action_detect_language
+  - action: action_study_programs
+
+
+- story: provide with consulting hours
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: consulting_hours
+  - action: action_detect_language
+  - action: professor_form
+  - active_loop: professor_form
+  - slot_was_set:
+    - requested_slot: professor_name
+  - slot_was_set:
+    - professor_name: Radim Veselý
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_confirm_professor_name_slot_value
+  - action: action_detect_language
+  - action: action_get_consulting_hours

@@ -8,6 +8,19 @@ actions:
   - action_get_canteen_menu
   - action_default_fallback
   - action_default_ask_affirmation
+  - action_get_consulting_hours
+  - utter_ask_rephrase
+  - utter_greet
+  - utter_cheer_up
+  - utter_did_that_help
+  - utter_happy
+  - utter_goodbye
+  - utter_iamabot
+  - utter_ask_professor_name
+  - utter_submit
+  - utter_confirm_professor_name_slot_value
+  - utter_accommodation
+  - utter_student_unity
 
 intents:
   - greet
@@ -21,12 +34,21 @@ intents:
   - canteen_menu
   - accommodation
   - student_unity
+  - consulting_hours
+  - trigger_action_get_consulting_hours   # For button payload (will skip step with name asking)
+
+forms:
+  professor_form:
+    required_slots:
+      - professor_name
 
 entities:
   - bachelor_degree
   - master_degree
   - doctor_degree
   - language
+  - name
+  - professor_name
 
 slots:
   langcode:
@@ -45,6 +67,20 @@ slots:
     mappings:
       - type: from_entity
         entity: language
+  professor_name:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: professor_form
+            requested_slot: professor_name
+  name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: name
 
 responses:
   utter_ask_rephrase:
@@ -89,6 +125,45 @@ responses:
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+
+  utter_ask_professor_name:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "What professor should I like look for?"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Pro kterého učitele mám hledat?"
+
+  utter_submit:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Ok, thanks!"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Dobře, díky!"
+
+  utter_confirm_professor_name_slot_value:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Searching info for {professor_name}"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Hledám informaci o {professor_name}"
 
   utter_accommodation:
     - condition:

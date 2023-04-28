@@ -3,12 +3,23 @@ from typing import Any, Text, Dict, List
 import requests
 import json
 import pandas as pd
+import os
+
+from selenium import webdriver
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.firefox import GeckoDriverManager
+
+from dotenv import load_dotenv
 from pathlib import Path
-from rasa_sdk import Action, Tracker
+from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.events import ConversationPaused
 from rasa_sdk.events import UserUtteranceReverted
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
+from rasa_sdk.types import DomainDict
 from polyglot.detect import Detector
 
 
@@ -45,7 +56,7 @@ class ActionDetectLanguage(Action):
 
         if langcode not in ['en', 'cs']:
             dispatcher.utter_message(
-                text=f'Unfortunately I don\'t speak {langcode}, can only speak English or Czech')
+                text=f'Unfortunately I don\'t speak {langname}, can only speak English or Czech')
 
         print(langname)
 
@@ -201,7 +212,7 @@ class ActionDefaultAskAffirmation(Action):
                 "canteen_menu": "Jidelníček na dnes",
             }
 
-            message = "Promiň, nerozumím ti. Máš na mýsli něco z tohohle?"
+            message = "Promiň, nerozumím ti. Máš na mysli něco z tohohle?"
         else:
             # Show user-friendly translation of most popular intents
             intent_mappings = {
@@ -345,3 +356,193 @@ class ActionGetCanteenMenu(Action):
         dispatcher.utter_message(text=message)
 
         return []
+
+class ActionGetConsultingHours(Action):
+    def name(self) -> Text:
+        return "action_get_consulting_hours"
+
+    def _init_browser(self):
+        options = webdriver.FirefoxOptions()
+        options.headless = True
+        #options.set_preference("general.useragent.override", f"user-agent={USER_AGENT}")
+        service = FirefoxService(executable_path=GeckoDriverManager().install())
+
+        browser = webdriver.Firefox(options=options, service=service)
+
+        return browser
+
+    def _authenticate_in_insis(self):
+        """
+        Not used currently
+        """
+
+        load_dotenv()
+
+        insis_user = os.getenv('INSIS_USER')
+        insis_password = os.getenv('INSIS_PASSWORD')
+
+        self.browser.get('https://insis.vse.cz/auth/')
+
+        input_field_xpaths = ["//input[@name='credential_0']", "//input[@name='credential_1']"]
+
+        for xpath, credential in zip(input_field_xpaths, [insis_user, insis_password]):
+            # Wait and click on location input field
+            WebDriverWait(self.browser, 30).until(
+                EC.element_to_be_clickable((By.XPATH, xpath))).click()
+
+            inp = self.browser.find_element(By.XPATH, xpath)
+
+            inp.send_keys(credential)
+
+        login_button_xpath = "//input[@id='login-btn']"
+        self.browser.find_element(By.XPATH, login_button_xpath).click()
+        self.browser.refresh()
+
+    def _get_data(self, professor):
+        professor = professor.split(',')[0].strip()
+
+        headers = {
+            'Accept': 'text/html, */*; q=0.01',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'cs-CZ,cs;q=0.9',
+            'Connection': 'keep-alive',
+            'Content-Length': '466',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Host': 'insis.vse.cz',
+            'Origin': 'https://insis.vse.cz',
+            'Referer': 'https://insis.vse.cz/lide/?_m=104',
+            'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="99", "Google Chrome";v="99"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"macOS"',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-origin',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+
+        data = {
+            '_suggestKey': professor.lower(),
+            'upresneni_default': '-;zam_pomery=1,2',
+            '_suggestMaxItems': 25,
+            'upresneni': 'zamestnanci',
+            '_suggestHandler': 'lide',
+            'lang': 'cz',
+        }
+
+        try:
+            r = requests.post('https://insis.vse.cz/uissuggest.pl', data=data, headers=headers)
+            people_found = r.json()['data']
+        except:
+            people_found = None
+
+        return people_found
+
+    def _get_consulting_hours(self, person_id):
+        profile_url = f'https://insis.vse.cz/lide/clovek.pl?id={person_id}'
+
+        self.browser = self._init_browser()
+        self.browser.get(profile_url)
+
+        try:
+            consulting_hours_xpath = "//td[text() = 'Konzultační hodiny:' or text() = 'Consulting hours:']/parent::tr/td[2]"
+            WebDriverWait(self.browser, 10).until(
+                EC.visibility_of_element_located((By.XPATH, consulting_hours_xpath)))
+            consulting_hours = self.browser.find_element(By.XPATH, consulting_hours_xpath).text.replace('\n', ' ')
+
+        except Exception:
+            consulting_hours = None
+        finally:
+            self.browser.close()
+
+        return consulting_hours
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        langcode = tracker.get_slot('langcode')
+
+        name = tracker.get_slot('name')
+
+        # Professor name can be passed as button payload using entity "name"
+        if name is None:
+            professor = tracker.get_slot('professor_name')
+        else:
+            professor = name
+
+        people_found = self._get_data(professor)
+
+        if not people_found:
+            if langcode == 'en':
+                message = f'Professor "{professor}" was not found in Insis'
+            else:
+                message = f'Učitel "{professor}" nebyl v Insisu nalezen'
+
+            buttons_resp = [
+                {"title": "Try again" if langcode == 'en' else "Zkusit znovu",
+                 "payload": f'/action_get_consulting_hours{{"langcode": "{langcode}"}}'}
+            ]
+        elif len(people_found) > 1:
+            # Output format for professor is: ['professor name', 'professor id', '', 'department']
+
+            buttons_resp = [
+                {"title": f'{x[0]} ({x[3]})',
+                 "payload": f'/trigger_action_get_consulting_hours{{"name": "{x[0]}", "langcode": "{langcode}"}}'}
+                for x in people_found
+            ]
+
+            if langcode == 'en':
+                message = f'More than one professor with name "{professor}" found. Please choose one from list'
+            else:
+                message = f'Víc než 1 učitel "{professor}" nalezen. Vyběr si prosím ze seznamu'
+
+        else:
+            buttons_resp = None
+            person = people_found[0]
+            print(f'Found {person}')
+            person_id = person[1]
+
+            consulting_hours = self._get_consulting_hours(person_id)
+
+            if consulting_hours is not None:
+                if langcode == 'en':
+                    message = f'{professor} has the following consulting hours: <br><br>'
+                else:
+                    message = f'{professor} má následující konzultační hodiny: <br><br>'
+
+                message += consulting_hours
+            else:
+                if langcode == 'en':
+                    message = f'Consulting hours of "{professor}" were not found'
+                else:
+                    message = f'Konzultační hodiny "{professor}" nebyly nalezeny'
+
+        dispatcher.utter_message(text=message, buttons=buttons_resp)
+
+        return [SlotSet("professor_name", None), SlotSet("name", None)]
+
+
+def clean_name(name):
+    return "".join([c for c in name if c.isalpha()])
+
+
+class ValidateNameForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_professor_form"
+
+    def validate_professor_name(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+
+        # If the name is super short, it might be wrong.
+        name = clean_name(slot_value)
+        if len(name) < 5:
+            dispatcher.utter_message(text="That must've been a typo.")
+            return {"professor_name": None}
+
+        return {"professor_name": name}

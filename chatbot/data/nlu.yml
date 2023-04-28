@@ -195,7 +195,6 @@ nlu:
     - dormitory
     - how much does room cost?
     - can I rent a room for summer?
-    - how to apply for room in dorm?
     - Dorm
     - rooms for students
     - dorm info
@@ -219,3 +218,17 @@ nlu:
     - Can I become a member of 4FIS?
     - What events does 4FIS organize?
     - Does 4FIS run an orientation week?
+
+- intent: consulting_hours
+  examples: |
+    - konzultační hodiny
+    - consulting hours
+    - jaké konzultační hodiny má?
+    - what are consulting hours for?
+
+- lookup: name
+  examples: |
+    - Jan Veselý
+    - John Brown
+    - Radim Zelený
+    - Mattew Hong
