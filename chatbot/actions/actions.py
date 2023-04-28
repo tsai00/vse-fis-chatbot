@@ -4,6 +4,8 @@ import requests
 import json
 import pandas as pd
 import os
+import redis
+import pyarrow as pa
 
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service as FirefoxService
@@ -290,7 +292,7 @@ class ActionDefaultFallback(Action):
 
 
 class ActionGetCanteenMenu(Action):
-    def _get_menu(self):
+    def _get_menu(self, date):
         headers = {
             'Accept': 'application/json',
             'Cookie': 'Anete2=585c60bb-43ac-45d7-804c-df13fd845a0d; vse_cookie_allow=%5B%5D; vse_cookie_set=1',
@@ -303,8 +305,7 @@ class ActionGetCanteenMenu(Action):
             'X-Requested-With': 'XMLHttpRequest'
         }
 
-        today = f'{datetime.datetime.now():%Y-%m-%d}'
-        canteen_menu_url = f'https://webkredit.vse.cz/webkredit_italska/Api/Ordering/Menu?Dates={today}T00%3A00%3A00.000Z&CanteenId=1'
+        canteen_menu_url = f'https://webkredit.vse.cz/webkredit_italska/Api/Ordering/Menu?Dates={date}T00%3A00%3A00.000Z&CanteenId=1'
         try:
             response = requests.get(canteen_menu_url, headers=headers)
             menu = response.json()['groups']
@@ -322,13 +323,30 @@ class ActionGetCanteenMenu(Action):
 
         language = tracker.get_slot('langcode')
 
-        todays_menu = self._get_menu()
+        today = f'{datetime.datetime.now():%Y-%m-%d}'
 
-        try:
-            menu_df = pd.DataFrame(todays_menu)
-            menu_df['mealName'] = menu_df.apply(lambda x: [x['rows'][i]['item']['mealName'] for i in range(len(x['rows']))], axis=1)
-        except:
-            todays_menu = ''
+        # First check if menu from today does not already exist in Redis (to avoid unnecessary requests)
+        # Note: chatbot_redis is name of Docker container from docker compose
+        r = redis.Redis(host='chatbot_redis', port=6379, encoding="utf-8", decode_responses=True, db=0)
+
+        redis_canteen_value = r.get(f'canteen_menu_{today}')
+        context = pa.default_serialization_context()
+
+        if redis_canteen_value is None:
+            todays_menu = self._get_menu(today)
+
+            try:
+                menu_df = pd.DataFrame(todays_menu)
+                menu_df['mealName'] = menu_df.apply(
+                    lambda x: [x['rows'][i]['item']['mealName'] for i in range(len(x['rows']))], axis=1)
+
+                r.set(f'canteen_menu_{today}', context.serialize(menu_df).to_buffer().to_pybytes())
+            except:
+                menu_df = None
+                todays_menu = ''
+        else:
+            todays_menu = True
+            menu_df = context.deserialize(redis_canteen_value)
 
         if todays_menu:
             message = ''
@@ -352,10 +370,10 @@ class ActionGetCanteenMenu(Action):
             else:
                 message = 'Unfortunately we could not provide you with menu canteen at the moment'
 
-        print(message)
         dispatcher.utter_message(text=message)
 
         return []
+
 
 class ActionGetConsultingHours(Action):
     def name(self) -> Text:
@@ -512,7 +530,23 @@ class ActionGetConsultingHours(Action):
             print(f'Found {person}')
             person_id = person[1]
 
-            consulting_hours, consulting_hours_link = self._get_consulting_hours(person_id)
+            today = f'{datetime.datetime.now():%Y-%m-%d}'
+
+            # First check if result from today does not already exist in Redis (to avoid unnecessary requests)
+            # Note: chatbot_redis is name of Docker container from docker compose
+            r = redis.Redis(host='chatbot_redis', port=6379, encoding="utf-8", decode_responses=True, db=0)
+
+            redis_consulting_hours_value = r.get(f'consulting_hours_{person_id}_{today}')
+            redis_consulting_hours_link_value = r.get(f'consulting_hours_link_{person_id}_{today}')
+
+            if redis_consulting_hours_value is None:
+                consulting_hours, consulting_hours_link = self._get_consulting_hours(person_id)
+
+                r.set(f'consulting_hours_{person_id}_{today}', consulting_hours)
+                r.set(f'consulting_hours_link_{person_id}_{today}', consulting_hours_link)
+            else:
+                consulting_hours = redis_consulting_hours_value
+                consulting_hours_link = redis_consulting_hours_link_value
 
             if consulting_hours is not None:
                 if langcode == 'en':
