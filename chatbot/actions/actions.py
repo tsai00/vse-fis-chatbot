@@ -399,7 +399,7 @@ class ActionGetConsultingHours(Action):
         self.browser.refresh()
 
     def _get_data(self, professor):
-        professor = professor.split(',')[0].strip()
+        professor = professor.split(',')[0].replace('Ing.', '').replace('Ph.D.', '').replace('Bc.', '').replace('Doc.', '').strip()
 
         headers = {
             'Accept': 'text/html, */*; q=0.01',
@@ -446,16 +446,25 @@ class ActionGetConsultingHours(Action):
 
         try:
             consulting_hours_xpath = "//td[text() = 'Konzultační hodiny:' or text() = 'Consulting hours:']/parent::tr/td[2]"
+
             WebDriverWait(self.browser, 10).until(
                 EC.visibility_of_element_located((By.XPATH, consulting_hours_xpath)))
+
             consulting_hours = self.browser.find_element(By.XPATH, consulting_hours_xpath).text.replace('\n', ' ')
+
+            try:
+                consulting_hours_link_xpath = consulting_hours_xpath + "//a"
+                consulting_hours_link = self.browser.find_element(By.XPATH, consulting_hours_link_xpath).get_attribute('href')
+            except:
+                consulting_hours_link = ''
 
         except Exception:
             consulting_hours = None
+            consulting_hours_link = ''
         finally:
             self.browser.close()
 
-        return consulting_hours
+        return consulting_hours, consulting_hours_link
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -503,7 +512,7 @@ class ActionGetConsultingHours(Action):
             print(f'Found {person}')
             person_id = person[1]
 
-            consulting_hours = self._get_consulting_hours(person_id)
+            consulting_hours, consulting_hours_link = self._get_consulting_hours(person_id)
 
             if consulting_hours is not None:
                 if langcode == 'en':
@@ -512,6 +521,12 @@ class ActionGetConsultingHours(Action):
                     message = f'{professor} má následující konzultační hodiny: <br><br>'
 
                 message += consulting_hours
+
+                if consulting_hours_link:
+                    if langcode == 'en':
+                        message += f'<br><br> Link for booking: <a href="{consulting_hours_link}" target="_blank">book</a>'
+                    else:
+                        message += f'<br><br> Odkaz na rezervaci: <a href="{consulting_hours_link}" target="_blank">rezervovat</a>'
             else:
                 if langcode == 'en':
                     message = f'Consulting hours of "{professor}" were not found'
