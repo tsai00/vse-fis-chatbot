@@ -19,6 +19,7 @@ You can spin up the containers by running following command in the root director
 ```bash
 docker compose up --build
 ```
+You should also create .env file with host IP variable (see .env.sample) as localhost.
 Changes made on frontend side will be automatically propagated to the container.
 
 Another option is to manually run Rasa Chatbot and Rasa Actions server components (following commands may be different on Windows OS):
