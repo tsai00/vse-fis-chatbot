@@ -5,6 +5,7 @@ import json
 import pandas as pd
 import os
 import redis
+import difflib
 import pyarrow as pa
 
 from selenium import webdriver
@@ -596,3 +597,68 @@ class ValidateNameForm(FormValidationAction):
             return {"professor_name": None}
 
         return {"professor_name": name}
+
+
+class ActionGetBuildingAddresses(Action):
+    def name(self) -> Text:
+        return "action_get_building_addresses"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        language = tracker.get_slot('langcode')
+
+        if language not in ['en', 'cs']:
+            language = 'cs'
+
+        building = next(tracker.get_latest_entity_values('uni_building'), None)
+
+        study_programs_file = Path(Path(__file__).resolve().parent, 'sources', 'buildings_location.json')
+
+        with study_programs_file.open(mode='r') as f:
+            json_dict = json.load(f)
+
+        default_message_en = """
+                    <br>VŠE is located in two locations in Prague.
+                    <br>In <b>Žižkov</b> with the address: nám. W. Churchilla 1938/4, 130 67 Prague 3 - Žižkov. And in the <b>Jižní Město</b> area: Ekonomická 957, 148 00 Prague 4 - Kunratice
+                    <br>In area Žižkov are located four buildings. <b>New building</b>, <b>Old building</b>, <b>Rajska building</b> and <b>Italska building</b>.
+                    <br>\u2022 <b>Library</b> is located in Old building in Žižkov area.
+                    <br>\u2022 Address of <b>dormitory Vltava</b>: Chemická 953, 148 00 Prague 4 - Jižní Město
+                    <br>\u2022 Address of <b>dormitory Blanice</b>: Chemická 955, 148 00 Prague 4 - Jižní Město.
+                    <br>\u2022 Address of <b>Rooseveltova dormitory</b>: Strojnická 1430/7, 170 00 Prague 7.
+                    <br>\u2022 Address of <b>Eislerova dormitory</b>: V Zahrádkách 1953/67, 130 00 Prague 3.
+                    <br>\u2022 Address of <b>Jarov II.</b>: Pod lipami 2603/43, 130 00 Prague 3.
+                    <br>\u2022 Address of <b>Palachova dormitory</b>: Koněvova 93/198, 130 00 Prague 3.
+                    <br>\u2022 Address of <b>Thalerova dormitory</b>: Jeseniova 1954/210, 130 00 Prague 3.
+                """
+
+        default_message_cs = """
+                <br>VŠE sídlí na dvou místech v Praze. 
+                <br>Na <b>Žižkově</b> s adresou: nám. W. Churchilla 1938/4, 130 67 Praha 3 - Žižkov. A v areálu <b>Jižní Město</b>: Ekonomická 957, 148 00 Praha 4 - Kunratice.
+                <br>V areálu Žižkov se nacházejí čtyři budovy. <b>Nová budova</b>, <b>Stará budova</b>, <b>Rajská budova</b> a <b>Italská budova</b>.
+                <br>\u2022 <b>Knihovna</b> se nachází ve staré budově v areálu Žižkov.
+                <br>\u2022 Adresa <b>koleje Vltava</b>: Chemická 953, 148 00 Praha 4 - Jižní Město.
+                <br>\u2022 Adresa <b>koleje Blanice</b>: Chemická 955, 148 00 Praha 4 - Jižní Město.
+                <br>\u2022 Adresa <b>Rooseveltové koleje</b>: Strojnická 1430/7, 170 00 Praha 7.
+                <br>\u2022 Adresa <b>Eislerové koleje</b>: V Zahrádkách 1953/67, 130 00 Praha 3.
+                <br>\u2022 Adresa <b>koleje Jarov II.</b>: Pod lipami 2603/43, 130 00 Praha 3.
+                <br>\u2022 Adresa <b>Palachove koleje</b>: Koněvova 93/198, 130 00 Praha 3.
+                <br>\u2022 Adresa <b>Thalerove koleje</b>: Jeseniova 1954/210, 130 00 Praha 3.
+                """
+
+        if building is None:
+            message = default_message_en if language == 'en' else default_message_cs
+        else:
+            # Find building with the biggest probability using string difference
+            similarity_list = dict(sorted({x: difflib.SequenceMatcher(None, x, building).ratio() * 100 for x in json_dict.keys()}.items(), key=lambda x: x[1], reverse=True))
+            best_option_key, best_option_value = next(iter(similarity_list.items()))
+
+            if best_option_value < 0.5:
+                message = default_message_en if language == 'en' else default_message_cs
+            else:
+                message = f"The address is: {json_dict[best_option_key]}" if language == 'en' else f"Adresa je: {json_dict[best_option_key]}"
+
+        dispatcher.utter_message(text=message)
+
+        return []
