@@ -339,7 +339,7 @@ class ActionGetCanteenMenu(Action):
         redis_canteen_value = r.get(f'canteen_menu_{today}')
         context = pa.default_serialization_context()
 
-        if redis_canteen_value is None:
+        if redis_canteen_value is None or not redis_canteen_value:
             todays_menu = self._get_menu(today)
 
             try:
@@ -347,10 +347,12 @@ class ActionGetCanteenMenu(Action):
                 menu_df['mealName'] = menu_df.apply(
                     lambda x: [x['rows'][i]['item']['mealName'] for i in range(len(x['rows']))], axis=1)
 
-                r.set(f'canteen_menu_{today}', context.serialize(menu_df).to_buffer().to_pybytes())
+                redis_value = context.serialize(menu_df).to_buffer().to_pybytes() if not menu_df.empty else ''
+                r.set(f'canteen_menu_{today}', redis_value)
             except:
                 menu_df = None
                 todays_menu = ''
+                r.set(f'canteen_menu_{today}', '')
         else:
             todays_menu = True
             menu_df = context.deserialize(redis_canteen_value)
