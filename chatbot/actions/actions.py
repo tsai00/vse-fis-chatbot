@@ -68,7 +68,6 @@ class ActionDetectLanguage(Action):
 
 
 class ActionStudyPrograms(Action):
-
     def name(self) -> Text:
         return "action_study_programs"
 
@@ -102,27 +101,30 @@ class ActionStudyPrograms(Action):
         print(master_programs)
 
         if all([bachelor_degree is None, master_degree is None, doctor_degree is None]):
-            if language == 'cs':
-                message = f"FIS momentálně nabízí následující programy: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
+            if language == 'en':
+                message = f"FIS currently offers following programs: <br>Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
             else:
-                message = f"FIS currently offers following programs: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
+                message = f"FIS momentálně nabízí následující programy: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
+
         else:
             message = ''
             if bachelor_degree is not None:
-                if language == 'cs':
+                if language == 'en':
+                    message = f'Unfortunately FIS does not currently offer any Bachelor program in English.'
+                else:
                     message = f'FIS momentálně nabízí následující bakalářské programy: <br>{bachelor_programs}'
-                else:
-                    message = f'For Bachelor students FIS currently offers following programs: <br>{bachelor_programs}'
+
             if master_degree is not None:
-                if language == 'cs':
-                    message = f'FIS momentálně nabízí následující magisterské programy: <br>{master_programs}'
-                else:
+                if language == 'en':
                     message = f'For Master students FIS currently offers following programs: <br>{master_programs}'
-            if doctor_degree is not None:
-                if language == 'cs':
-                    message = f'FIS momentálně nabízí následující doktorské programy: <br>{doctor_programs}'
                 else:
+                    message = f'FIS momentálně nabízí následující magisterské programy: <br>{master_programs}'
+
+            if doctor_degree is not None:
+                if language == 'en':
                     message = f'For PhD students FIS currently offers following programs: <br>{doctor_programs}'
+                else:
+                    message = f'FIS momentálně nabízí následující doktorské programy: <br>{doctor_programs}'
 
         dispatcher.utter_message(text=message)
 
@@ -152,16 +154,16 @@ class ActionGetHoliday(Action):
         language = tracker.get_slot('langcode')
         todays_holiday = self._get_todays_holiday()
 
-        if language == 'cs':
-            if todays_holiday is not None:
-                message = f'Dneska má svátek {todays_holiday}'
-            else:
-                message = 'Momentálně ti bohužel nemůžeme říct, kdo má dneska svátek. Ale dejme tomu, že dneska mají svátek všichni :)'
-        else:
+        if language == 'en':
             if todays_holiday is not None:
                 message = f'{todays_holiday} has holiday today'
             else:
                 message = 'Unfortunately we can\'t say who has holiday today. But let\'s say today is everybody\'s holiday :)'
+        else:
+            if todays_holiday is not None:
+                message = f'Dneska má svátek {todays_holiday}'
+            else:
+                message = 'Momentálně ti bohužel nemůžeme říct, kdo má dneska svátek. Ale dejme tomu, že dneska mají svátek všichni :)'
 
         dispatcher.utter_message(text=message)
 
@@ -208,16 +210,7 @@ class ActionDefaultAskAffirmation(Action):
         # Select top 3 intents from the tracker + skip 1st one (nlu fallback)
         predicted_intents = tracker.latest_message["intent_ranking"][1:4]
 
-        if language == 'cs':
-            # Show user-friendly translation of most popular intents
-            intent_mappings = {
-                "study_programs": "Studijní programy",
-                "holiday": "Kdo má svátek dneska?",
-                "canteen_menu": "Jidelníček na dnes",
-            }
-
-            message = "Promiň, nerozumím ti. Máš na mysli něco z tohohle?"
-        else:
+        if language == 'en':
             # Show user-friendly translation of most popular intents
             intent_mappings = {
                 "study_programs": "Study programs",
@@ -226,6 +219,15 @@ class ActionDefaultAskAffirmation(Action):
             }
 
             message = "Sorry, can not understand you. What do you want to do?"
+        else:
+            # Show user-friendly translation of most popular intents
+            intent_mappings = {
+                "study_programs": "Studijní programy",
+                "holiday": "Kdo má svátek dneska?",
+                "canteen_menu": "Jidelníček na dnes",
+            }
+
+            message = "Promiň, nerozumím ti. Máš na mysli něco z tohohle?"
 
         default_button_titles = {
             'cs': 'Jiné',
@@ -275,16 +277,17 @@ class ActionDefaultFallback(Action):
         if language not in ['en', 'cs']:
             language = 'cs'
 
-        if language == 'cs':
-            message = f"Promiň, ale s tímhle ti pomoct nemůžu. Zkus se prosím obratit na studijní oddělení: <br>" \
-                      f"\u2022 Bakalářské studium: jana.hudcekova@vse.cz, sedlacko@vse.cz <br>" \
-                      f"\u2022 Magisterské studium:  iva.hudcova@vse.cz, veronika.brunerova@vse.cz <br>" \
-                      f"\u2022 Doktorské studium: tereza.krajickova@vse.cz<br>"
-        else:
+        if language == 'en':
             message = f"I'm sorry, I can't help you with that. Please contact student office: <br>" \
                       f"\u2022 Bachelor studies: jana.hudcekova@vse.cz, sedlacko@vse.cz <br>" \
                       f"\u2022 Master studies:  iva.hudcova@vse.cz, veronika.brunerova@vse.cz <br>" \
                       f"\u2022 Doctoral studies: tereza.krajickova@vse.cz <br>"
+        else:
+            message = f"Promiň, ale s tímhle ti pomoct nemůžu. Zkus se prosím obratit na studijní oddělení: <br>" \
+                      f"\u2022 Bakalářské studium: jana.hudcekova@vse.cz, sedlacko@vse.cz <br>" \
+                      f"\u2022 Magisterské studium:  iva.hudcova@vse.cz, veronika.brunerova@vse.cz <br>" \
+                      f"\u2022 Doktorské studium: tereza.krajickova@vse.cz<br>"
+
 
         # tell the user they are being passed to a customer service agent
         dispatcher.utter_message(text=message)
@@ -353,24 +356,25 @@ class ActionGetCanteenMenu(Action):
         if todays_menu:
             message = ''
 
-            if language == 'cs':
-                message += 'Dneska v menze mají: <br><br>'
-            else:
+            if language == 'en':
                 message += 'Today\'s menu in canteen: <br><br>'
+            else:
+                message += 'Dneska v menze mají: <br><br>'
 
             for _, row in menu_df.iterrows():
                 message += row['mealKindName'] + '<br>'
                 message += ' \u2022 ' + '<br> \u2022 '.join(row['mealName']) + '<br><br>'
         elif not todays_menu:
-            if language == 'cs':
-                message = 'Jídelníček na dneska není k dispozici'
-            else:
+            if language == 'en':
                 message = 'There is no canteen menu for today'
-        else:
-            if language == 'cs':
-                message = 'Momentálně ti bohužel nemůžeme ukázat jídelníček'
             else:
+                message = 'Jídelníček na dneska není k dispozici'
+        else:
+            if language == 'en':
                 message = 'Unfortunately we could not provide you with menu canteen at the moment'
+            else:
+                message = 'Momentálně ti bohužel nemůžeme ukázat jídelníček'
+
 
         dispatcher.utter_message(text=message)
 
