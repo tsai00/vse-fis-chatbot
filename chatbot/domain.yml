@@ -348,8 +348,7 @@ responses:
       text: "Each faculty has this differently. A student receives a scholarship for excellent academic results in the past academic year upon meeting the conditions announced by the dean or rector for a specific academic year. 
              <br>For more information visit <a href='https://www.vse.cz/predpisy/stipendijni-rad-vse/' target='_blank'>this page</a>.
              <br><br>To receive a merit scholarship, a student must have a very good average. Each faculty sets this limit differently. A student receives a scholarship for excellent academic results in the past academic year upon meeting the conditions announced by the dean or rector for a specific academic year. 
-             <br>For more information please refer to <a href='https://www.vse.cz/predpisy/323/' target='_blank'>regulation</a>.
-"
+             <br>For more information please refer to <a href='https://www.vse.cz/predpisy/323/' target='_blank'>regulation</a>."
 
     - condition:
         - type: slot
@@ -366,20 +365,13 @@ responses:
         - type: slot
           name: langcode
           value: en
-      text: "Each faculty has this differently. A student receives a scholarship for excellent academic results in the past academic year upon meeting the conditions announced by the dean or rector for a specific academic year. 
-               <br>For more information visit <a href='https://www.vse.cz/predpisy/stipendijni-rad-vse/' target='_blank'>this page</a>.
-               <br><br>To receive a merit scholarship, a student must have a very good average. Each faculty sets this limit differently. A student receives a scholarship for excellent academic results in the past academic year upon meeting the conditions announced by the dean or rector for a specific academic year. 
-               <br>For more information please refer to <a href='https://www.vse.cz/predpisy/323/' target='_blank'>regulation</a>.
-              "
+      text: "Fees associated with the study can be found <a href='https://www.vse.cz/predpisy/poplatky-spojene-se-studiem-v-akademickem-roce-2022-2023/' target='_blank'>here</a>."
 
     - condition:
         - type: slot
           name: langcode
           value: cs
-      text: "VŠE poskytuje <b>prospěchové</b>, <b>ubytovací</b>, <b>mimořádné</b>, <b>sociální</b> stipendium, <b>doktorské</b> stipendium a stipendium na <b>podporu studia v zahraničí</b> a na <b>výzkum, vývoj a inovace</b>. 
-               <br>Bližší informace nalezneš <a href='https://www.vse.cz/predpisy/stipendijni-rad-vse/' target='_blank'>zde</a>.
-               <br><br>Pro obdržení prospěchového stipendia, musí student mít velmi dobrý průměr. Tuto hranici si stanovuje každá fakulta odlišně. Student dostává stipendium za vynikající studijní výsledky v uplynulém akademickém roce při splnění podmínek, které pro konkrétní akademický rok vyhlašuje děkan, nebo rektor. 
-               <br>Pro bližší informace viz <a href='https://www.vse.cz/predpisy/323/' target='_blank'>předpis</a>."
+      text: "Poplatky spojené se studiem najdeš <a href='https://www.vse.cz/predpisy/poplatky-spojene-se-studiem-v-akademickem-roce-2022-2023/' target='_blank'>zde</a>."
 
 
 
