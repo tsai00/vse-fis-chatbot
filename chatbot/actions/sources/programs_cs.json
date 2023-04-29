@@ -1,1 +1,25 @@
-{"bachelor": ["Aplikovaná Informatika", "Statistické metody", ""], "master": ["Data a Analytika pro business", "..."], "doctor":  ["Aplikovaná Informatika"]}
+{
+  "bachelor": [
+    "Aplikovaná informatika",
+    "Data Analytics",
+    "Informační média a služby",
+    "Matematické metody v ekonomii",
+    "Multimédia v ekonomické praxi"
+  ],
+  "master": [
+    "Data a analytika pro business",
+    "Ekonometrie a operační výzkum",
+    "Ekonomická demografie",
+    "Informační management",
+    "Informační systémy a technologie",
+    "Kognitivní informatika",
+    "Podniková informatika",
+    "Statistika",
+    "Znalostní a webové technologie"
+  ],
+  "doctor":  [
+    "Aplikovaná informatika",
+    "Ekonometrie a operační výzkum",
+    "Statistika"
+  ]
+}

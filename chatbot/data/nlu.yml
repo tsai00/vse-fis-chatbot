@@ -213,6 +213,8 @@ nlu:
     - Jaké akce pořádá 4FIS?
     - Máte studentské spolky?
     - Pořádá 4FIS seznamovák?
+    - Jaké vzdělávací akce pořádá 4FIS?
+    - Jaké nevzdělávací akce pořádá 4FIS?
     - What is 4FIS?
     - What is "Kruhy"?
     - Can I become a member of 4FIS?
@@ -225,6 +227,8 @@ nlu:
     - consulting hours
     - jaké konzultační hodiny má?
     - what are consulting hours for?
+    - konzultačky
+    - office hours
 
 - lookup: name
   examples: |
@@ -232,3 +236,164 @@ nlu:
     - John Brown
     - Radim Zelený
     - Mattew Hong
+
+- intent: events
+  examples: |
+    - Jaké akce pořádá FIS?
+    - Jaké odborné kurzy pro veřejnost pořádá FIS?
+    - Jaké přednášky nabízí FIS pro studenty SŠ?
+    - Jaké přednášky nabízí FIS pro studenty středních škol?
+    - What events does FIS organize?
+    - What professional courses does FIS organize for the public?
+    - What lectures does FIS offer for secondary school students?
+
+- intent: academic_year_schedule
+  examples: |
+    - Kde najdu harmonogramy akademických roků?
+    - Jaký je plán akademického roku?
+    - Kde můžu najít plán aktuálního akademického roku?
+    - Kde můžu najít plán akademického roku?
+    - Kde můžu najít aktuální harmonogram?
+    - Where can I find academic year schedules?
+    - What is the plan for academic year?
+    - Where can I find plan for current academic year?
+    - Where can I find plan for academic year?
+    - Where can i find current academic year schedule?
+
+- intent: addresses
+  examples: |
+    - Kde sídlí VŠE?
+    - Jaké budovy se nacházejí v areálu Žižkov?
+    - Jaká je adresa [knihovny](uni_building)?
+    - Jaká je adresa [koleje Vltava](uni_building)?
+    - Jaká je adresa [koleje Blanice](uni_building)?
+    - Jaká je adresa [Rooseveltové koleje](uni_building)?
+    - Jaká je adresa [Eislerové koleje](uni_building)?
+    - Jaká je adresa [koleje Jarov II.](uni_building)?
+    - Jaká je adresa [Palachove koleje](uni_building)?
+    - Jaká je adresa [Thalerove koleje](uni_building)?
+    - Kde se nachází [kolej Vltava](uni_building)?
+    - Kde je [Rooseveltová kolej](uni_building)?
+    - Where is VŠE located?
+    - Blanice adresa
+    - adresa koleje Vltava
+    - adresa Jarov II
+    - Which buildings are located in Žizkov area?
+    - What is the address of the [library](uni_building)?
+    - What is the address of [dormitory Vltava](uni_building)?
+    - What is the address of [dormitory Blanice](uni_building)?
+    - What is the address of [Rooseveltova dormitory](uni_building)?
+    - What is the address of [Eislerova dormitory](uni_building)?
+    - What is the address of [Jarov II.](uni_building)?
+    - What is the address of [Palachova dormitory](uni_building)?
+    - What is the address of [Thalerova dormitory](uni_building)?
+    - Where is [Palachova dorm](uni_building) located?
+    - Where is [Blanice dorm](uni_building)?
+    - Vltava dorm address
+    - Blanice address
+    - address of Jarov 2
+
+- lookup: uni_building
+  examples: |
+    - knihovna
+    - kolej Vltava
+    - kolej Blanice
+    - Rooseveltová kolej
+    - Thalerová kolej
+    - Eislerová kolej
+    - Palachová koleje
+    - kolej Jarov II.
+    - Vltava kolej
+    - Blanice kolej
+    - Blanice
+    - Rooseveltova
+    - Palachová
+    - Eislerová
+    - Thalerová
+    - library
+    - Rooseveltova dorm
+    - Thalerova dormitory
+    - Eislerova dorm
+    - Palachova dormitory
+    - dorm Blanice
+    - dormitory Vltava
+    
+
+- intent: scholarship
+  examples: |
+    - Jaká jsou stipendia na VŠE?
+    - Dostanu podporu od VŠE?
+    - Jak podporuje VŠE studenty?
+    - Dostanu stipendium za dobrý prospěch?
+    - Jaký musím mít průměr, abych dostal stipendium?
+    - What are the scholarships at VŠE?
+    - How does VŠE support students?
+    - What grade point average do I have to have to get a scholarship?
+    - Will I receive support from the university?
+    - Will I get a scholarship for good grades?
+    
+
+- intent: tuition_fee
+  examples: |
+    - Co musím platit na začátku studia?
+    - Jaké jsou poplatky za překročení studia?
+    - Musím platit, když překročím dobu studia?
+    - Musím platit za každý semestr studia?
+    - Kolik stojí studovat v cizím jazyce na VŠE?
+    - What do I have to pay at the beginning of my studies?
+    - Do I have to pay if I exceed the study period?
+    - Do I have to pay for each semester of study?
+    - What are the fees for exceeding the course?
+    - How much does it cost to study in a foreign language at VŠE?
+    - How big is tuition fee?
+    
+
+- intent: video_manuals
+  examples: |
+    - Kde najdu video příručky?
+    - Kde najdu video příručku k budovám na Žižkově?
+    - Kde najdu video příručku k budovám na Jižáku?
+    - Kde najdu video příručku ke kolejím?
+    - Kde najdu video příručku k InSISu?
+    - Kde najdu video příručku ke kreditovému systému?
+    - Kde najdu video příručku k předmětům?
+    - Kde najdu video příručku k hodnocení z předmětů?
+    - Kde najdu video příručku k registracím a zápisu předmětů?
+    - Co se dozvím z video příruček?
+    - Where can I find video manuals?
+    - Where can I find Video manual about buildings in Žižkov?
+    - Where can I find Video manual abot buildings in Jižák?
+    - Where can I find Video manual about the dorm?
+    - Where can I find Video manual about InSIS?
+    - Where can I find Video manual about school credit system?
+    - Where can I find Video manual about subjects?
+    - Where can I find a Video manual about subject evaluation?
+    - Where can I find a Video manual about registration of subjects?
+    - What will I learn from the video manuals?
+    
+
+- intent: credit_system
+  examples: |
+    - Jak funguje kreditový systém
+    - Kredity
+    - Kredity bakalářské studium
+    - Jaký počet kreditů musím odstudovat za studium
+    - Co jsou kreditové poukázky
+    - How the credit system works
+    - Credits
+    - Bachelor's degree credits
+    - How many credits do I need to complete for my studies
+    - What are credit vouchers
+    - ECTS
+    - What is ECTS?
+    - ECTS co to je
+    - kolik mám kreditů na začátků?
+
+- intent: buildings_map
+  examples: |
+    - mapa budov
+    - budovy mapa
+    - plánek areálu
+    - průvodce budovami
+    - buildings map
+    - site plan

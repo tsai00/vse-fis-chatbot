@@ -86,6 +86,84 @@ stories:
   - action: action_detect_language
   - action: action_study_programs
 
+- story: Show info about events
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: events
+  - action: action_detect_language
+  - action: utter_events
+
+
+- story: Show info about academic year schedule
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: academic_year_schedule
+  - action: action_detect_language
+  - action: utter_academic_year_schedule
+
+
+- story: Show info about addresses
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: addresses
+  - action: action_detect_language
+  - action: action_get_building_addresses
+
+
+- story: Show info about scholarship
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: scholarship
+  - action: action_detect_language
+  - action: utter_scholarship
+
+
+- story: Show info about tuition fee
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: tuition_fee
+  - action: action_detect_language
+  - action: utter_tuition_fee
+
+
+- story: Show info about video manuals
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: video_manuals
+  - action: action_detect_language
+  - action: utter_video_manuals
+
+
+- story: Show info about credit system
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: credit_system
+  - action: action_detect_language
+  - action: utter_credit_system
+
+
+- story: Show buildings map
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: buildings_map
+  - action: utter_buildings_map
+
 
 - story: provide with consulting hours
   steps:

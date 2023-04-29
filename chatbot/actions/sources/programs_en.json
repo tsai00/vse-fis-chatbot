@@ -1,1 +1,12 @@
-{"bachelor": ["Data Analytics"], "master": ["Information Systems Management", "Economic Data Analysis"], "doctor":  ["Applied Informatics"]}
+{
+  "bachelor": [],
+  "master": [
+    "Information Systems Management",
+    "Economic Data Analysis"
+  ],
+  "doctor":  [
+    "Applied informatics",
+    "Econometrics and Operations Research",
+    "Statistics"
+  ]
+}

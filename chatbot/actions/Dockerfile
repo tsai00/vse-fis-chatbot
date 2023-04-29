@@ -17,4 +17,7 @@ RUN pip install --no-binary=:pyicu: pyicu   # Due to the errors with installing 
 
 COPY . .
 
+# Replace redis host in actions (chatbot_redis is the name of container from docker-compose)
+RUN sed -i "s/redis.Redis(host='localhost'/redis.Redis(host='chatbot_redis'/g" /app/actions.py
+
 EXPOSE 5055

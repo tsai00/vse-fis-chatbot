@@ -5,6 +5,7 @@ import json
 import pandas as pd
 import os
 import redis
+import difflib
 import pyarrow as pa
 
 from selenium import webdriver
@@ -67,7 +68,6 @@ class ActionDetectLanguage(Action):
 
 
 class ActionStudyPrograms(Action):
-
     def name(self) -> Text:
         return "action_study_programs"
 
@@ -101,27 +101,30 @@ class ActionStudyPrograms(Action):
         print(master_programs)
 
         if all([bachelor_degree is None, master_degree is None, doctor_degree is None]):
-            if language == 'cs':
-                message = f"FIS momentálně nabízí následující programy: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
+            if language == 'en':
+                message = f"FIS currently offers following programs: <br>Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
             else:
-                message = f"FIS currently offers following programs: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
+                message = f"FIS momentálně nabízí následující programy: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
+
         else:
             message = ''
             if bachelor_degree is not None:
-                if language == 'cs':
+                if language == 'en':
+                    message = f'Unfortunately FIS does not currently offer any Bachelor program in English.'
+                else:
                     message = f'FIS momentálně nabízí následující bakalářské programy: <br>{bachelor_programs}'
-                else:
-                    message = f'For Bachelor students FIS currently offers following programs: <br>{bachelor_programs}'
+
             if master_degree is not None:
-                if language == 'cs':
-                    message = f'FIS momentálně nabízí následující magisterské programy: <br>{master_programs}'
-                else:
+                if language == 'en':
                     message = f'For Master students FIS currently offers following programs: <br>{master_programs}'
-            if doctor_degree is not None:
-                if language == 'cs':
-                    message = f'FIS momentálně nabízí následující doktorské programy: <br>{doctor_programs}'
                 else:
+                    message = f'FIS momentálně nabízí následující magisterské programy: <br>{master_programs}'
+
+            if doctor_degree is not None:
+                if language == 'en':
                     message = f'For PhD students FIS currently offers following programs: <br>{doctor_programs}'
+                else:
+                    message = f'FIS momentálně nabízí následující doktorské programy: <br>{doctor_programs}'
 
         dispatcher.utter_message(text=message)
 
@@ -151,16 +154,16 @@ class ActionGetHoliday(Action):
         language = tracker.get_slot('langcode')
         todays_holiday = self._get_todays_holiday()
 
-        if language == 'cs':
-            if todays_holiday is not None:
-                message = f'Dneska má svátek {todays_holiday}'
-            else:
-                message = 'Momentálně ti bohužel nemůžeme říct, kdo má dneska svátek. Ale dejme tomu, že dneska mají svátek všichni :)'
-        else:
+        if language == 'en':
             if todays_holiday is not None:
                 message = f'{todays_holiday} has holiday today'
             else:
                 message = 'Unfortunately we can\'t say who has holiday today. But let\'s say today is everybody\'s holiday :)'
+        else:
+            if todays_holiday is not None:
+                message = f'Dneska má svátek {todays_holiday}'
+            else:
+                message = 'Momentálně ti bohužel nemůžeme říct, kdo má dneska svátek. Ale dejme tomu, že dneska mají svátek všichni :)'
 
         dispatcher.utter_message(text=message)
 
@@ -181,9 +184,12 @@ class ActionIntroMessage(Action):
                                       "Pamatuj si ale prosím, že se jen učím a nejsem Chat GPT-5 :)")
 
         button_resp = [
-            {"title": "Bakalářské studium", "payload": '/study_programs{"bachelor_degree": "bakalářské", "language": "Czech"}'},
-            {"title": "Magisterské studium", "payload": '/study_programs{"master_degree": "magisterské", "language": "Czech"}'},
-            {"title": "Doktorské studium", "payload": '/study_programs{"doctor_degree": "doktorksé", "language": "Czech"}'},
+            {"title": "Bakalářské obory", "payload": '/study_programs{"bachelor_degree": "bakalářské", "language": "Czech"}'},
+            {"title": "Magisterské obory", "payload": '/study_programs{"master_degree": "magisterské", "language": "Czech"}'},
+            {"title": "Doktorské obory", "payload": '/study_programs{"doctor_degree": "doktorksé", "language": "Czech"}'},
+            {"title": "Hledat konzultační hodiny", "payload": '/consulting_hours{"language": "Czech"}'},
+            {"title": "Dnešní jídelníček", "payload": '/canteen_menu{"language": "Czech"}'},
+            {"title": "Mapa budov", "payload": '/buildings_map'},
         ]
 
         dispatcher.utter_message(text="Nevíš, jak se zeptat? Tady jsme pro tebe připravili nejčastější okruhy otázek.", buttons=button_resp)
@@ -207,16 +213,7 @@ class ActionDefaultAskAffirmation(Action):
         # Select top 3 intents from the tracker + skip 1st one (nlu fallback)
         predicted_intents = tracker.latest_message["intent_ranking"][1:4]
 
-        if language == 'cs':
-            # Show user-friendly translation of most popular intents
-            intent_mappings = {
-                "study_programs": "Studijní programy",
-                "holiday": "Kdo má svátek dneska?",
-                "canteen_menu": "Jidelníček na dnes",
-            }
-
-            message = "Promiň, nerozumím ti. Máš na mysli něco z tohohle?"
-        else:
+        if language == 'en':
             # Show user-friendly translation of most popular intents
             intent_mappings = {
                 "study_programs": "Study programs",
@@ -225,6 +222,15 @@ class ActionDefaultAskAffirmation(Action):
             }
 
             message = "Sorry, can not understand you. What do you want to do?"
+        else:
+            # Show user-friendly translation of most popular intents
+            intent_mappings = {
+                "study_programs": "Studijní programy",
+                "holiday": "Kdo má svátek dneska?",
+                "canteen_menu": "Jidelníček na dnes",
+            }
+
+            message = "Promiň, nerozumím ti. Máš na mysli něco z tohohle?"
 
         default_button_titles = {
             'cs': 'Jiné',
@@ -274,16 +280,17 @@ class ActionDefaultFallback(Action):
         if language not in ['en', 'cs']:
             language = 'cs'
 
-        if language == 'cs':
-            message = f"Promiň, ale s tímhle ti pomoct nemůžu. Zkus se prosím obratit na studijní oddělení: <br>" \
-                      f"\u2022 Bakalářské studium: jana.hudcekova@vse.cz, sedlacko@vse.cz <br>" \
-                      f"\u2022 Magisterské studium:  iva.hudcova@vse.cz, veronika.brunerova@vse.cz <br>" \
-                      f"\u2022 Doktorské studium: tereza.krajickova@vse.cz<br>"
-        else:
+        if language == 'en':
             message = f"I'm sorry, I can't help you with that. Please contact student office: <br>" \
                       f"\u2022 Bachelor studies: jana.hudcekova@vse.cz, sedlacko@vse.cz <br>" \
                       f"\u2022 Master studies:  iva.hudcova@vse.cz, veronika.brunerova@vse.cz <br>" \
                       f"\u2022 Doctoral studies: tereza.krajickova@vse.cz <br>"
+        else:
+            message = f"Promiň, ale s tímhle ti pomoct nemůžu. Zkus se prosím obratit na studijní oddělení: <br>" \
+                      f"\u2022 Bakalářské studium: jana.hudcekova@vse.cz, sedlacko@vse.cz <br>" \
+                      f"\u2022 Magisterské studium:  iva.hudcova@vse.cz, veronika.brunerova@vse.cz <br>" \
+                      f"\u2022 Doktorské studium: tereza.krajickova@vse.cz<br>"
+
 
         # tell the user they are being passed to a customer service agent
         dispatcher.utter_message(text=message)
@@ -328,12 +335,12 @@ class ActionGetCanteenMenu(Action):
 
         # First check if menu from today does not already exist in Redis (to avoid unnecessary requests)
         # Note: chatbot_redis is name of Docker container from docker compose
-        r = redis.Redis(host='chatbot_redis', port=6379, encoding="utf-8", decode_responses=True, db=0)
+        r = redis.Redis(host='localhost', port=6379, encoding="utf-8", decode_responses=True, db=0)
 
         redis_canteen_value = r.get(f'canteen_menu_{today}')
         context = pa.default_serialization_context()
 
-        if redis_canteen_value is None:
+        if redis_canteen_value is None or not redis_canteen_value:
             todays_menu = self._get_menu(today)
 
             try:
@@ -341,10 +348,12 @@ class ActionGetCanteenMenu(Action):
                 menu_df['mealName'] = menu_df.apply(
                     lambda x: [x['rows'][i]['item']['mealName'] for i in range(len(x['rows']))], axis=1)
 
-                r.set(f'canteen_menu_{today}', context.serialize(menu_df).to_buffer().to_pybytes())
+                redis_value = context.serialize(menu_df).to_buffer().to_pybytes() if not menu_df.empty else ''
+                r.set(f'canteen_menu_{today}', redis_value)
             except:
                 menu_df = None
                 todays_menu = ''
+                r.set(f'canteen_menu_{today}', '')
         else:
             todays_menu = True
             menu_df = context.deserialize(redis_canteen_value)
@@ -352,24 +361,25 @@ class ActionGetCanteenMenu(Action):
         if todays_menu:
             message = ''
 
-            if language == 'cs':
-                message += 'Dneska v menze mají: <br><br>'
-            else:
+            if language == 'en':
                 message += 'Today\'s menu in canteen: <br><br>'
+            else:
+                message += 'Dneska v menze mají: <br><br>'
 
             for _, row in menu_df.iterrows():
                 message += row['mealKindName'] + '<br>'
                 message += ' \u2022 ' + '<br> \u2022 '.join(row['mealName']) + '<br><br>'
         elif not todays_menu:
-            if language == 'cs':
-                message = 'Jídelníček na dneska není k dispozici'
-            else:
+            if language == 'en':
                 message = 'There is no canteen menu for today'
-        else:
-            if language == 'cs':
-                message = 'Momentálně ti bohužel nemůžeme ukázat jídelníček'
             else:
+                message = 'Jídelníček na dneska není k dispozici'
+        else:
+            if language == 'en':
                 message = 'Unfortunately we could not provide you with menu canteen at the moment'
+            else:
+                message = 'Momentálně ti bohužel nemůžeme ukázat jídelníček'
+
 
         dispatcher.utter_message(text=message)
 
@@ -535,7 +545,7 @@ class ActionGetConsultingHours(Action):
 
             # First check if result from today does not already exist in Redis (to avoid unnecessary requests)
             # Note: chatbot_redis is name of Docker container from docker compose
-            r = redis.Redis(host='chatbot_redis', port=6379, encoding="utf-8", decode_responses=True, db=0)
+            r = redis.Redis(host='localhost', port=6379, encoding="utf-8", decode_responses=True, db=0)
 
             redis_consulting_hours_value = r.get(f'consulting_hours_{person_id}_{today}')
             redis_consulting_hours_link_value = r.get(f'consulting_hours_link_{person_id}_{today}')
@@ -596,3 +606,68 @@ class ValidateNameForm(FormValidationAction):
             return {"professor_name": None}
 
         return {"professor_name": name}
+
+
+class ActionGetBuildingAddresses(Action):
+    def name(self) -> Text:
+        return "action_get_building_addresses"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        language = tracker.get_slot('langcode')
+
+        if language not in ['en', 'cs']:
+            language = 'cs'
+
+        building = next(tracker.get_latest_entity_values('uni_building'), None)
+
+        study_programs_file = Path(Path(__file__).resolve().parent, 'sources', 'buildings_location.json')
+
+        with study_programs_file.open(mode='r') as f:
+            json_dict = json.load(f)
+
+        default_message_en = """
+                    <br>VŠE is located in two locations in Prague.
+                    <br>In <b>Žižkov</b> with the address: nám. W. Churchilla 1938/4, 130 67 Prague 3 - Žižkov. And in the <b>Jižní Město</b> area: Ekonomická 957, 148 00 Prague 4 - Kunratice
+                    <br>In area Žižkov are located four buildings. <b>New building</b>, <b>Old building</b>, <b>Rajska building</b> and <b>Italska building</b>.
+                    <br>\u2022 <b>Library</b> is located in Old building in Žižkov area.
+                    <br>\u2022 Address of <b>dormitory Vltava</b>: Chemická 953, 148 00 Prague 4 - Jižní Město
+                    <br>\u2022 Address of <b>dormitory Blanice</b>: Chemická 955, 148 00 Prague 4 - Jižní Město.
+                    <br>\u2022 Address of <b>Rooseveltova dormitory</b>: Strojnická 1430/7, 170 00 Prague 7.
+                    <br>\u2022 Address of <b>Eislerova dormitory</b>: V Zahrádkách 1953/67, 130 00 Prague 3.
+                    <br>\u2022 Address of <b>Jarov II.</b>: Pod lipami 2603/43, 130 00 Prague 3.
+                    <br>\u2022 Address of <b>Palachova dormitory</b>: Koněvova 93/198, 130 00 Prague 3.
+                    <br>\u2022 Address of <b>Thalerova dormitory</b>: Jeseniova 1954/210, 130 00 Prague 3.
+                """
+
+        default_message_cs = """
+                <br>VŠE sídlí na dvou místech v Praze. 
+                <br>Na <b>Žižkově</b> s adresou: nám. W. Churchilla 1938/4, 130 67 Praha 3 - Žižkov. A v areálu <b>Jižní Město</b>: Ekonomická 957, 148 00 Praha 4 - Kunratice.
+                <br>V areálu Žižkov se nacházejí čtyři budovy. <b>Nová budova</b>, <b>Stará budova</b>, <b>Rajská budova</b> a <b>Italská budova</b>.
+                <br>\u2022 <b>Knihovna</b> se nachází ve staré budově v areálu Žižkov.
+                <br>\u2022 Adresa <b>koleje Vltava</b>: Chemická 953, 148 00 Praha 4 - Jižní Město.
+                <br>\u2022 Adresa <b>koleje Blanice</b>: Chemická 955, 148 00 Praha 4 - Jižní Město.
+                <br>\u2022 Adresa <b>Rooseveltové koleje</b>: Strojnická 1430/7, 170 00 Praha 7.
+                <br>\u2022 Adresa <b>Eislerové koleje</b>: V Zahrádkách 1953/67, 130 00 Praha 3.
+                <br>\u2022 Adresa <b>koleje Jarov II.</b>: Pod lipami 2603/43, 130 00 Praha 3.
+                <br>\u2022 Adresa <b>Palachove koleje</b>: Koněvova 93/198, 130 00 Praha 3.
+                <br>\u2022 Adresa <b>Thalerove koleje</b>: Jeseniova 1954/210, 130 00 Praha 3.
+                """
+
+        if building is None:
+            message = default_message_en if language == 'en' else default_message_cs
+        else:
+            # Find building with the biggest probability using string difference
+            similarity_list = dict(sorted({x: difflib.SequenceMatcher(None, x, building).ratio() * 100 for x in json_dict.keys()}.items(), key=lambda x: x[1], reverse=True))
+            best_option_key, best_option_value = next(iter(similarity_list.items()))
+
+            if best_option_value < 0.5:
+                message = default_message_en if language == 'en' else default_message_cs
+            else:
+                message = f"The address is: {json_dict[best_option_key]}" if language == 'en' else f"Adresa je: {json_dict[best_option_key]}"
+
+        dispatcher.utter_message(text=message)
+
+        return []

@@ -9,6 +9,7 @@ actions:
   - action_default_fallback
   - action_default_ask_affirmation
   - action_get_consulting_hours
+  - action_get_building_addresses
   - utter_ask_rephrase
   - utter_greet
   - utter_cheer_up
@@ -36,6 +37,14 @@ intents:
   - student_unity
   - consulting_hours
   - trigger_action_get_consulting_hours   # For button payload (will skip step with name asking)
+  - events
+  - academic_year_schedule
+  - addresses
+  - scholarship
+  - tuition_fee
+  - video_manuals
+  - credit_system
+  - buildings_map
 
 forms:
   professor_form:
@@ -49,6 +58,7 @@ entities:
   - language
   - name
   - professor_name
+  - uni_building
 
 slots:
   langcode:
@@ -131,7 +141,7 @@ responses:
         - type: slot
           name: langcode
           value: en
-      text: "What professor should I like look for?"
+      text: "What professor should I look for?"
 
     - condition:
         - type: slot
@@ -170,15 +180,15 @@ responses:
         - type: slot
           name: langcode
           value: en
-      text: "The Jarov dormitory is available for international students (as well as for Czech students) – approximately 
+      text: "The <b>Jarov</b> dormitory is available for international students (as well as for Czech students) – approximately 
              15 minutes from the university (by tram). VŠE guarantees a place at the university dormitory for all the 
-             international students. International students are most commonly accommodated at Palachova dormitory and 
-             Jarov II  (5 Minutes far away from the Palachova dormitory). 
-             <br><br>The prices for the accomodation:
-             - standard shared room (double-bed room in a unit with two rooms – together 4 students in one unit, shared kitchen and bathroom) – 8-12 EUR per night
-             - comfort single room (single room in a unit with two rooms – together 2 students in one unit, shared kitchen and bathroom) – 10-20 EUR per night
+             international students. International students are most commonly accommodated at <b>Palachova</b> dormitory and 
+             <b>Jarov II</b>  (5 Minutes far away from the Palachova dormitory). 
+             <br><br>The prices for the accommodation:
+             - standard shared room (double-bed room in a unit with two rooms – together 4 students in one unit, shared kitchen and bathroom) – <b>8-12 EUR per night</b>
+             - comfort single room (single room in a unit with two rooms – together 2 students in one unit, shared kitchen and bathroom) – <b>10-20 EUR per night</b>
             
-             <br><br>Detailed price list see here: https://accommodation.vse.cz/students-accommodation/documents/price-list-of-accommodation/#cenik-22-10
+             <br><br>Detailed price list see <a href='https://accommodation.vse.cz/students-accommodation/documents/price-list-of-accommodation/#cenik-22-10' target='_blank'>here</a>.
              <br>You can apply in advance only. Applications will be open in June, to finish the application is necessary to pay a deposit in amount of 5.000 CZK (200 EUR).  Then the communication proceeds with the Dormitory management.
              Moving in to rooms is possible usually from the second week in September."
 
@@ -188,15 +198,15 @@ responses:
           value: cs
       text:  "Studenti, kteří nepocházejí z Prahy, mohou zažádat o bydlení na koleji. Vysoká škola ekonomická v Praze 
               disponuje několika budovami, které se nacházejí po celém hlavním města. 
-              Studentům prvních ročníků se doporučuje bydlet v areálu Jižního Města, kde probíhá i většina výuky 
+              Studentům prvních ročníků se doporučuje bydlet v areálu <b>Jižního Města</b>, kde probíhá i většina výuky 
               prvních ročníků. Starší studenti mohou vyhledat areál na Jarově nebo Rooseveltovu kolej v Holešovicích.
 
-              <br><br>Koleje jsou vybaveny posilovnami, v tělocvičnách probíhají zájmové aktivity jako zumba, joga 
+              <br><br>Koleje jsou vybaveny <b>posilovnami</b>, v tělocvičnách probíhají zájmové aktivity jako zumba, joga 
               nebo pilates. Na Jarově probíhá každoročně Jarov liga v malé kopané. Pokud rádi běháte, ale nemáte ještě 
-              na ekonomce žádného parťáka, můžete se přidat k Jarovským běžcům. Na Rooseveltově koleji se lze zapsat 
+              na ekonomce žádného parťáka, můžete se přidat k Jarovským běžcům. Na <b>Rooseveltově koleji</b> se lze zapsat 
               do ochotnického divadla.
               
-              <br><br>Ceny na kolej se dozvíš tady: https://suz.vse.cz/zajemci-o-ubytovani/dokumenty/cenik-kolejneho/"
+              <br><br>Ceny na koleje dozvíš <a href='https://suz.vse.cz/zajemci-o-ubytovani/dokumenty/cenik-kolejneho/' target='_blank'>tady</a>."
 
   utter_student_unity:
     - condition:
@@ -208,7 +218,7 @@ responses:
               Informatics and Statistics of the University of Economics. The association currently has over thirty members, 
               students who have decided that they want to make the faculty a better place through their contribution. 
               A place where academic life meets social life.
-              <br><br>More info on https://4fis.cz/o-nas
+              <br>More info can be found <a href='https://4fis.cz/o-nas/' target='_blank'>here</a>.
 
               <br><br><b>Kruhy: </b>The main idea of Kruhy is to create an environment in which students of the first years 
               of bachelor's studies can comfortably get to know each other and thus make friends with whom they will not 
@@ -217,7 +227,7 @@ responses:
               10 other students from your program, and you will be assigned a guide. Guide is a student from the same 
               program as You, just a bit older. Thanks to his rich experience, he can help you overcome every pitfall
               that you encounter at the beginning of your studies.
-              <br><br>More info on https://4fis.cz
+              <br>More info <a href='https://4fis.cz' target='_blank'>here</a>.
               
               <br><br>Can I become a member of 4FIS?
               <br>Yes, it doesn't matter if you are a freshman, a seasoned student, have 3 years of experience in IT or 
@@ -227,7 +237,7 @@ responses:
               from companies or directly from students for lectures? Take care of accounting and calculate taxes? 
               Or do you just want to host a beer pong tournament every once in a while? Are you a gaming enthusiast? 
               These are just some of the activities that can be done in the association.
-              https://docs.google.com/forms/d/1KiXjUYKV6ENUORLbjjKoVTu0x2WFovWk0ZUvillPV9I/viewform?edit_requested=true
+              <br>You can apply <a href='https://docs.google.com/forms/d/1KiXjUYKV6ENUORLbjjKoVTu0x2WFovWk0ZUvillPV9I/viewform?edit_requested=true' target='_blank'>here</a>.
               
               <br><br>Events
               <br>Every semester it organizes many events, in cooperation with the school and partners. 
@@ -237,28 +247,28 @@ responses:
               <br>Non-educational events: University is not just a school, that's why we organize several events to unwind. 
               Students can come to us, for example, for table football, beer pong or a concert. 
               <br>Gaming: We are not behind digitally either. Our gaming section organizes regular LAN tournaments.
-              https://4fis.cz/akce/?filter=vzdelavaci-akce
+              <br>More info <a href='https://4fis.cz/akce/?filter=vzdelavaci-akce' target='_blank'>here</a>.
               
-              <br><br>Does 4FIS run a dating site?
+              <br><br>Does 4FIS run a orientation week?
               <br>Yes, every year we organize orientation events directly in cooperation with the faculty, where we help 
               integrate new students into life at the University. The introductory course is a great opportunity for 
               new and existing students not only to get to know the faculty and the study program, but also to establish 
               new friendships and, of course, to strengthen old ones. The course program is prepared by students of the 
               FIS faculty, who have a lot of experience in organizing such events and love great fun and well-being.
-              https://ksa.vse.cz/studium/magisterske-studium/informacni-management-ing/predsemestralni-soustredeni-studentu/?fbclid=IwAR1JUatTf0u016D2XxNVx-gX5q-LApyq7MtVNL8-E5WJzu4lRm2bsY0jNhI"
+              <br>Více informace na <a href='https://ksa.vse.cz/studium/magisterske-studium/informacni-management-ing/predsemestralni-soustredeni-studentu/?fbclid=IwAR1JUatTf0u016D2XxNVx-gX5q-LApyq7MtVNL8-E5WJzu4lRm2bsY0jNhI' target='_blank'>website</a>."
 
     - condition:
         - type: slot
           name: langcode
           value: cs
-      text:  "FIS má celkem 2 studentské spolky:
+      text:  'FIS má celkem 2 studentské spolky:
               <br><br><b>4FIS: </b>4FIS je studentský spolek, který funguje pod záštitou Fakulty informatiky a statistiky VŠE. 
               V současnosti má spolek přes třicet členů, studentů, kteří se rozhodli, že chtějí svým přičiněním udělat fakultu 
               lepším místem. Místem, kde se setkává akademický život s tím společenským.
               Spolek stojí za přípravami a realizacemi různých přednášek z IT světa, seznamovacích kurzů studentů prvních 
               ročníků, workshopů, a hlavně, co je nejdůležitější, propojuje lidi z praxe se studenty, kteří si chtějí 
               rozšířit obzory a získat nejen nové informace, ale i zkušenosti, které se v profesním životě můžou hodit.
-              <br><br>Více informace na https://4fis.cz/o-nas/
+              <br>Více informace nalezneš <a href="https://4fis.cz/o-nas/" target="_blank">zde</a>.
               
               <br><br><b>Kruhy: </b>Hlavní ideou Kruhů je vytvořit prostředí, v němž se mohou studenti prvních ročníků 
               bakalářského studia mezi sebou pohodlně seznámit a získat tak kamarády, se kterými budou nejen studovat, 
@@ -266,7 +276,7 @@ responses:
               Jako účastník Kruhů budeš zařazen - světe div se - do kruhu, kde budeš spolu s dalšími zhruba 10 studenty z 
               tvého programu, a bude vám přidělen guide. Guide je student ze stejného programu jako Ty, akorát o něco starší. 
               Díky nabitým zkušenostem Ti tak může pomoci překonat každou nástrahu, která Tě v úvodu tvého studia potká.
-              <br><br>Více informace na https://4fis.cz
+              <br>Více informace je <a href="https://4fis.cz" target="_blank">zde</a>.
               
               <br><br>Mohu se stat FISákem?
               <br>Ano, nezáleží na tom, jestli jsi prvák, ostřílený student, máš 3 roky praxe v IT nebo jsi nikdy 
@@ -275,7 +285,8 @@ responses:
               Baví Tě fotit? Shánět zajímavé kontakty z firem nebo přímo studentů na přednášky? Starat se o účetnictví a 
               počítat daně? Nebo chceš jen občas uspořádat turnaj v beerpongu? Jsi nadšenec do gamingu? 
               To jsou jen některé z činností, které lze ve spolku dělat. 
-              https://docs.google.com/forms/d/1KiXjUYKV6ENUORLbjjKoVTu0x2WFovWk0ZUvillPV9I/viewform?edit_requested=true
+              <br>Přihlášku můžeš vyplnit <a href="https://docs.google.com/forms/d/1KiXjUYKV6ENUORLbjjKoVTu0x2WFovWk0ZUvillPV9I/viewform?edit_requested=true" target="_blank">zde</a>.
+
               
               <br><br>Akce
               <br>Každý semestr pořádá FIS mnoho akcí, ve spolupráci se školou a partnery.
@@ -287,7 +298,7 @@ responses:
               mohou dorazit třeba na stolní fotbálek, beerpong nebo koncert. 
               
               <br>Gaming: Nejsme pozadu ani digitálně. Naše gaming sekce pořádá pravidelné LAN turnaje. 
-              https://4fis.cz/akce/?filter=vzdelavaci-akce
+              <br>Podrobněji <a href="https://4fis.cz/akce/?filter=vzdelavaci-akce" target="_blank">zde</a>.
               
               <br><br>Pořádá 4FIS seznamovák?
               <br>Ano, každoročně pořádáme seznamovací akce přímo ve spolupráci s fakultou, kde pomáháme začlenit nové studenty 
@@ -295,8 +306,132 @@ responses:
               seznámení se s fakultou a studijním programem, ale také k navázání nových přátelství a samozřejmě k posílení 
               těch starých. Program kurzu připravují studenti fakulty FIS, kteří mají řadu zkušeností  s pořádání takových 
               akcí a milují skvělou zábavu a pohodu. 
-              https://ksa.vse.cz/studium/magisterske-studium/informacni-management-ing/predsemestralni-soustredeni-studentu/?fbclid=IwAR1JUatTf0u016D2XxNVx-gX5q-LApyq7MtVNL8-E5WJzu4lRm2bsY0jNhI"
+              <br>Více informace na <a href="https://ksa.vse.cz/studium/magisterske-studium/informacni-management-ing/predsemestralni-soustredeni-studentu/?fbclid=IwAR1JUatTf0u016D2XxNVx-gX5q-LApyq7MtVNL8-E5WJzu4lRm2bsY0jNhI" target="_blank">webu</a>.'
+  utter_events:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: 'The Faculty of Informatics and Statistics organizes courses for the public, lectures for secondary school students and, in conjunction with the 4FIS student club, organizes educational and non-educational events.
+             <br>You can find all upcoming events in the <a href="https://kalendar.vse.cz/?web=fis.vse.cz" target="_blank">calendar</a> and on the <a href="https://4fis.cz/akce/?filter=vzdelavaci-akce" target="_blank">4FIS website</a>.
+             <br>Professional courses for the public are offered as classic intensive courses or as a series of several half-day educational blocks. 
+             <br>All information about the courses is <a href="https://fis.vse.cz/kurzy-pro-verejnost/" target="_blank">here</a>.
+             <br>The Faculty of Informatics and Statistics offers free lectures on computer science, mathematics and social sciences for secondary schools. 
+             <br>An overview of all offered lectures can be found <a href="https://fis.vse.cz/kurzy-pro-verejnost/prednasky-pro-ss/" target="_blank">here</a>.'
 
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: 'Fakulta informatiky a statistiky pořádá kurzy pro veřejnost, přednášky pro studenty SŠ a ve spojení se studentským klubem 4FIS pořádá vzdělávací i nevzdělávací akce.
+             <br>Všechny nadcházející akce najdeš v <a href="https://kalendar.vse.cz/?web=fis.vse.cz" target="_blank">kalendáři</a> a na <a href="https://4fis.cz/akce/?filter=vzdelavaci-akce" target="_blank">stránkách 4FIS</a>
+             <br>Odborné kurzy pro veřejnost jsou nabízeny jako klasické intenzivní kurzy nebo jako série několika půldenních vzdělávacích bloků. 
+             <br>Veškeré informace ke kurzům je <a href="https://fis.vse.cz/kurzy-pro-verejnost/" target="_blank">zde</a>.
+             <br>Fakulta informatiky a statistiky nabízí pro střední školy zdarma přednášky týkající se informatiky, matematiky a společenských věd. 
+             <br>Přehled všech nabízených přednášek nalezneš <a href="https://fis.vse.cz/kurzy-pro-verejnost/prednasky-pro-ss/" target="_blank">zde</a>.'
+
+  utter_academic_year_schedule:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: 'Schedules can be found on this <a href="https://www.vse.cz/studenti/studium/harmonogramy/" target="_blank">link</a>.'
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: 'Harmonogramy můžeš najít na tomto <a href="https://www.vse.cz/studenti/studium/harmonogramy/" target="_blank">linku</a>.'
+
+  utter_scholarship:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Each faculty has this differently. A student receives a scholarship for excellent academic results in the past academic year upon meeting the conditions announced by the dean or rector for a specific academic year. 
+             <br>For more information visit <a href='https://www.vse.cz/predpisy/stipendijni-rad-vse/' target='_blank'>this page</a>.
+             <br><br>To receive a merit scholarship, a student must have a very good average. Each faculty sets this limit differently. A student receives a scholarship for excellent academic results in the past academic year upon meeting the conditions announced by the dean or rector for a specific academic year. 
+             <br>For more information please refer to <a href='https://www.vse.cz/predpisy/323/' target='_blank'>regulation</a>."
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "VŠE poskytuje <b>prospěchové</b>, <b>ubytovací</b>, <b>mimořádné</b>, <b>sociální</b> stipendium, <b>doktorské</b> stipendium a stipendium na <b>podporu studia v zahraničí</b> a na <b>výzkum, vývoj a inovace</b>. 
+             <br>Bližší informace nalezneš <a href='https://www.vse.cz/predpisy/stipendijni-rad-vse/' target='_blank'>zde</a>.
+             <br><br>Pro obdržení prospěchového stipendia, musí student mít velmi dobrý průměr. Tuto hranici si stanovuje každá fakulta odlišně. Student dostává stipendium za vynikající studijní výsledky v uplynulém akademickém roce při splnění podmínek, které pro konkrétní akademický rok vyhlašuje děkan, nebo rektor. 
+             <br>Pro bližší informace viz <a href='https://www.vse.cz/predpisy/323/' target='_blank'>předpis</a>."
+
+
+  utter_tuition_fee:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Fees associated with the study can be found <a href='https://www.vse.cz/predpisy/poplatky-spojene-se-studiem-v-akademickem-roce-2022-2023/' target='_blank'>here</a>."
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Poplatky spojené se studiem najdeš <a href='https://www.vse.cz/predpisy/poplatky-spojene-se-studiem-v-akademickem-roce-2022-2023/' target='_blank'>zde</a>."
+
+  utter_video_manuals:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "From Video manuals, you will find out everything about the buildings of the University of Economics, how the information system at the University of Economics works, the method of assessment, the credit system, the number of exams and the creation of a schedule.
+            <br>You can find manual <a href='https://fis.vse.cz/obecne-informace/video-prirucky/' target='_blank'>here</a>
+            <br>Buildings in Žižkov: <a href='https://youtu.be/PqqfNpW0s6w' target='_blank'>link</a>
+            <br>Buildings in Jižák: <a href='https://youtu.be/NA5Zwj2mXxs' target='_blank'>link</a>
+            <br>Dorms: <a href='https://youtu.be/MpdQkwPCDFA' target='_blank'>link</a>
+            <br>InSIS: <a href='https://youtu.be/2LhFPuWy8U4' target='_blank'>link</a>
+            <br>Credit system: <a href='https://youtu.be/7AZ9Txwfgb8' target='_blank'>link</a>
+            <br>Subjects: <a href='https://youtu.be/ep-SdjuNHE4' target='_blank'>link</a>
+            <br>Subject evaluation: <a href='https://youtu.be/U7IocauH3cY' target='_blank'>link</a>
+            <br>Registration of subjects: <a href='https://youtu.be/lDpNfHLHCPA' target='_blank'>link</a>"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Z video příruček zjistíš vše o budovách VŠE, jak funguje informační systém na VŠE, způsob hodnocení, kreditový systém, počty zkoušek či vytváření rozvrhu.
+            <br>Video příručky najdeš zde na tomto <a href='https://fis.vse.cz/obecne-informace/video-prirucky/' target='_blank'>odkazu</a>
+            <br>Budovy na Žižkově: <a href='https://youtu.be/PqqfNpW0s6w' target='_blank'>odkaz</a>
+            <br>Budovy na Jižáku: <a href='https://youtu.be/NA5Zwj2mXxs' target='_blank'>odkaz</a>
+            <br>Koleje: <a href='https://youtu.be/MpdQkwPCDFA' target='_blank'>odkaz</a>
+            <br>InSIS: <a href='https://youtu.be/2LhFPuWy8U4' target='_blank'>odkaz</a>
+            <br>Kreditový systém: <a href='https://youtu.be/7AZ9Txwfgb8' target='_blank'>odkaz</a>
+            <br>Předměty: <a href='https://youtu.be/ep-SdjuNHE4' target='_blank'>odkaz</a>
+            <br>Hodnocení předmětů: <a href='https://youtu.be/U7IocauH3cY' target='_blank'>odkaz</a>
+            <br>Registrace a zápis předmětů: <a href='https://youtu.be/lDpNfHLHCPA' target='_blank'>odkaz</a>"
+
+
+  utter_credit_system:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Each credit corresponds to 26 hours of study load. This means that a 3-credit course should be easier than a 6-credit course. 
+            <br>At the beginning of the Bachelor's degree, each student receives 216 ECTS credit vouchers. In order to successfully complete the Bachelor's degree, a student must obtain 180 credits. It follows that 36 credit vouchers are reserve vouchers, these are for repeating courses or for extra courses.
+            <br>After each semester, you must have earned a total of the number of credits that is the product of the number of semesters completed and the number 20 for full-time study. If you do not meet this requirement, credits will be deducted to the extent of the shortfall in the above multiplier. However, the recommended pace of study is 30 credits per semester. Of course, you can take 34 some semesters and only 26 the next and nothing will happen. 
+            <br>A student may apply to the Dean of the Faculty for the addition of credits. They are usually awarded upon completion of the degree, so it is not an award of tens or hundreds of credits. However, their allocation is not certain and each request is considered individually. 
+            <br>If you are still unclear, here is a <a href='https://www.vse.cz/predpisy/studijni-a-zkusebni-rad-vysoke-skoly-ekonomicke-v-praze-platny-pro-studenty-zapsane-ke-studiu-do-akademickeho-roku-2018-2019-a-drive/' target='_blank'>link to the Study and Examination Regulations of the University of Economics</a>."
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Každý kredit odpovídá 26 hodinám studijní zátěže. To znamená, že předmět za 3 kredity by měl být snadnější než předmět za 6 kreditů. 
+            <br>Na začátku bakalářského studia dostane každý student 216 poukázek na kredity ECTS. Pro úspěšné absolvování bakalářského oboru musí student získat 180 kreditů. Z toho vyplývá, že 36 kreditových poukázek je rezervních, ty jsou určeny na opakování předmětů nebo na předměty navíc.
+            <br>Po každém semestru musíš mít v celkovém součtu získáno tolik kreditů, kolik je násobek počtu odstudovaných semestrů, a čísla 20 u prezenční formy studia. Pokud nesplníš tento požadavek, budou ti odečteny kredity v hodnotě chybějící do výše zmíněného násobku. Doporučené tempo studia je ale 30 kreditů za semestr. Samozřejmě některý semestr můžeš studovat 34, další pak jenom 26 a nic se nestane. 
+            <br>O přidání kreditů může požádat student u děkana fakulty. Přidělují se většinou na dostudování, takže se nejedná o přidělení v řádu desítek či stovek kreditů. Jejich přidělení ale není jisté a každá žádost se posuzuje individuálně. 
+            <br>Kdyby ti ještě nebylo něco jasné, tak zde je <a href='https://www.vse.cz/predpisy/studijni-a-zkusebni-rad-vysoke-skoly-ekonomicke-v-praze-platny-pro-studenty-zapsane-ke-studiu-do-akademickeho-roku-2018-2019-a-drive/' target='_blank'>odkaz na Studijní a zkušební řád VŠE</a>."
+
+  utter_buildings_map:
+    - text: ''
+      image: "./static/img/buildings_map.png"   # Path from frontend folder, relative to chat.js
 
 session_config:
   session_expiration_time: 60
