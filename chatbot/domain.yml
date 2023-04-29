@@ -44,6 +44,7 @@ intents:
   - tuition_fee
   - video_manuals
   - credit_system
+  - buildings_map
 
 forms:
   professor_form:
@@ -428,6 +429,9 @@ responses:
             <br>O přidání kreditů může požádat student u děkana fakulty. Přidělují se většinou na dostudování, takže se nejedná o přidělení v řádu desítek či stovek kreditů. Jejich přidělení ale není jisté a každá žádost se posuzuje individuálně. 
             <br>Kdyby ti ještě nebylo něco jasné, tak zde je <a href='https://www.vse.cz/predpisy/studijni-a-zkusebni-rad-vysoke-skoly-ekonomicke-v-praze-platny-pro-studenty-zapsane-ke-studiu-do-akademickeho-roku-2018-2019-a-drive/' target='_blank'>odkaz na Studijní a zkušební řád VŠE</a>."
 
+  utter_buildings_map:
+    - text: ''
+      image: "./static/img/buildings_map.png"   # Path from frontend folder, relative to chat.js
 
 session_config:
   session_expiration_time: 60

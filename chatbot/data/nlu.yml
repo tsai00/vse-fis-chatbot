@@ -388,3 +388,12 @@ nlu:
     - What is ECTS?
     - ECTS co to je
     - kolik mám kreditů na začátků?
+
+- intent: buildings_map
+  examples: |
+    - mapa budov
+    - budovy mapa
+    - plánek areálu
+    - průvodce budovami
+    - buildings map
+    - site plan

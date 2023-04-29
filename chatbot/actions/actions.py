@@ -189,6 +189,7 @@ class ActionIntroMessage(Action):
             {"title": "Doktorské obory", "payload": '/study_programs{"doctor_degree": "doktorksé", "language": "Czech"}'},
             {"title": "Hledat konzultační hodiny", "payload": '/consulting_hours{"language": "Czech"}'},
             {"title": "Dnešní jídelníček", "payload": '/canteen_menu{"language": "Czech"}'},
+            {"title": "Mapa budov", "payload": '/buildings_map'},
         ]
 
         dispatcher.utter_message(text="Nevíš, jak se zeptat? Tady jsme pro tebe připravili nejčastější okruhy otázek.", buttons=button_resp)

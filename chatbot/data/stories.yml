@@ -156,6 +156,15 @@ stories:
   - action: utter_credit_system
 
 
+- story: Show buildings map
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: buildings_map
+  - action: utter_buildings_map
+
+
 - story: provide with consulting hours
   steps:
   - intent: greet

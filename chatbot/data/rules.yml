@@ -125,3 +125,8 @@ rules:
   - intent: credit_system
   - action: action_detect_language
   - action: utter_credit_system
+
+- rule: Show buildings map
+  steps:
+  - intent: buildings_map
+  - action: utter_buildings_map
