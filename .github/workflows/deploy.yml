@@ -23,6 +23,9 @@ jobs:
           /usr/bin/git checkout main && 
           /usr/bin/git pull https://${{ secrets.PAT }}@github.com/tsai00/vse-fis-chatbot.git && 
           /usr/bin/git reset --hard HEAD && 
+          echo "Creating .env file" && 
+          cp .env.sample .env && 
+          sed -i "s/****/${{ secrets.HOST }}.g" ./.env &&
           echo "Running docker compose down" && 
           docker compose down && 
           echo "Running docker compose up" && 
