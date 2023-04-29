@@ -33,7 +33,7 @@ services:
   reverse_proxy:
     container_name: reverse_proxy
     restart: always
-    image: nginx:alpine
+    image: nginx:1.23.4-alpine
     ports:
       - '8080:8080'
     volumes:
@@ -42,3 +42,7 @@ services:
       - chatbot
       - chatbot_actions
       - web_demo
+
+  chatbot_redis:
+    container_name: chatbot_redis
+    image: redis:7.2-rc1-alpine

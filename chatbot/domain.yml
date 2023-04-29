@@ -8,6 +8,19 @@ actions:
   - action_get_canteen_menu
   - action_default_fallback
   - action_default_ask_affirmation
+  - action_get_consulting_hours
+  - utter_ask_rephrase
+  - utter_greet
+  - utter_cheer_up
+  - utter_did_that_help
+  - utter_happy
+  - utter_goodbye
+  - utter_iamabot
+  - utter_ask_professor_name
+  - utter_submit
+  - utter_confirm_professor_name_slot_value
+  - utter_accommodation
+  - utter_student_unity
 
 intents:
   - greet
@@ -20,12 +33,22 @@ intents:
   - holiday
   - canteen_menu
   - accommodation
+  - student_unity
+  - consulting_hours
+  - trigger_action_get_consulting_hours   # For button payload (will skip step with name asking)
+
+forms:
+  professor_form:
+    required_slots:
+      - professor_name
 
 entities:
   - bachelor_degree
   - master_degree
   - doctor_degree
   - language
+  - name
+  - professor_name
 
 slots:
   langcode:
@@ -44,6 +67,20 @@ slots:
     mappings:
       - type: from_entity
         entity: language
+  professor_name:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: professor_form
+            requested_slot: professor_name
+  name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: name
 
 responses:
   utter_ask_rephrase:
@@ -89,6 +126,45 @@ responses:
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
 
+  utter_ask_professor_name:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "What professor should I like look for?"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Pro kterého učitele mám hledat?"
+
+  utter_submit:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Ok, thanks!"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Dobře, díky!"
+
+  utter_confirm_professor_name_slot_value:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Searching info for {professor_name}"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Hledám informaci o {professor_name}"
+
   utter_accommodation:
     - condition:
         - type: slot
@@ -122,7 +198,104 @@ responses:
               
               <br><br>Ceny na kolej se dozvíš tady: https://suz.vse.cz/zajemci-o-ubytovani/dokumenty/cenik-kolejneho/"
 
+  utter_student_unity:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "FIS has 2 main student unities:
+              <br><br><b>4FIS: </b>4FIS is a student association that operates under the auspices of the Faculty of 
+              Informatics and Statistics of the University of Economics. The association currently has over thirty members, 
+              students who have decided that they want to make the faculty a better place through their contribution. 
+              A place where academic life meets social life.
+              <br><br>More info on https://4fis.cz/o-nas
 
+              <br><br><b>Kruhy: </b>The main idea of Kruhy is to create an environment in which students of the first years 
+              of bachelor's studies can comfortably get to know each other and thus make friends with whom they will not 
+              only study, but also spend their free time.
+              As a participant in Kruhy, you will be included in Kruhy, where you will be together with approximately 
+              10 other students from your program, and you will be assigned a guide. Guide is a student from the same 
+              program as You, just a bit older. Thanks to his rich experience, he can help you overcome every pitfall
+              that you encounter at the beginning of your studies.
+              <br><br>More info on https://4fis.cz
+              
+              <br><br>Can I become a member of 4FIS?
+              <br>Yes, it doesn't matter if you are a freshman, a seasoned student, have 3 years of experience in IT or 
+              have never earned a penny. If you have enthusiasm and a certain amount of madness, we have a place for you 
+              among us. A wide range of activities can be involved in the activities of the association. 
+              It must be said that they are all equal. Do you enjoy taking pictures? Looking for interesting contacts 
+              from companies or directly from students for lectures? Take care of accounting and calculate taxes? 
+              Or do you just want to host a beer pong tournament every once in a while? Are you a gaming enthusiast? 
+              These are just some of the activities that can be done in the association.
+              https://docs.google.com/forms/d/1KiXjUYKV6ENUORLbjjKoVTu0x2WFovWk0ZUvillPV9I/viewform?edit_requested=true
+              
+              <br><br>Events
+              <br>Every semester it organizes many events, in cooperation with the school and partners. 
+              
+              Educational events: We help you expand your knowledge gained from school with interesting workshops and lectures 
+              such as programming in R, Photoshop, Assertivita and others. 
+              <br>Non-educational events: University is not just a school, that's why we organize several events to unwind. 
+              Students can come to us, for example, for table football, beer pong or a concert. 
+              <br>Gaming: We are not behind digitally either. Our gaming section organizes regular LAN tournaments.
+              https://4fis.cz/akce/?filter=vzdelavaci-akce
+              
+              <br><br>Does 4FIS run a dating site?
+              <br>Yes, every year we organize orientation events directly in cooperation with the faculty, where we help 
+              integrate new students into life at the University. The introductory course is a great opportunity for 
+              new and existing students not only to get to know the faculty and the study program, but also to establish 
+              new friendships and, of course, to strengthen old ones. The course program is prepared by students of the 
+              FIS faculty, who have a lot of experience in organizing such events and love great fun and well-being.
+              https://ksa.vse.cz/studium/magisterske-studium/informacni-management-ing/predsemestralni-soustredeni-studentu/?fbclid=IwAR1JUatTf0u016D2XxNVx-gX5q-LApyq7MtVNL8-E5WJzu4lRm2bsY0jNhI"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text:  "FIS má celkem 2 studentské spolky:
+              <br><br><b>4FIS: </b>4FIS je studentský spolek, který funguje pod záštitou Fakulty informatiky a statistiky VŠE. 
+              V současnosti má spolek přes třicet členů, studentů, kteří se rozhodli, že chtějí svým přičiněním udělat fakultu 
+              lepším místem. Místem, kde se setkává akademický život s tím společenským.
+              Spolek stojí za přípravami a realizacemi různých přednášek z IT světa, seznamovacích kurzů studentů prvních 
+              ročníků, workshopů, a hlavně, co je nejdůležitější, propojuje lidi z praxe se studenty, kteří si chtějí 
+              rozšířit obzory a získat nejen nové informace, ale i zkušenosti, které se v profesním životě můžou hodit.
+              <br><br>Více informace na https://4fis.cz/o-nas/
+              
+              <br><br><b>Kruhy: </b>Hlavní ideou Kruhů je vytvořit prostředí, v němž se mohou studenti prvních ročníků 
+              bakalářského studia mezi sebou pohodlně seznámit a získat tak kamarády, se kterými budou nejen studovat, 
+              ale také trávit volný čas. 
+              Jako účastník Kruhů budeš zařazen - světe div se - do kruhu, kde budeš spolu s dalšími zhruba 10 studenty z 
+              tvého programu, a bude vám přidělen guide. Guide je student ze stejného programu jako Ty, akorát o něco starší. 
+              Díky nabitým zkušenostem Ti tak může pomoci překonat každou nástrahu, která Tě v úvodu tvého studia potká.
+              <br><br>Více informace na https://4fis.cz
+              
+              <br><br>Mohu se stat FISákem?
+              <br>Ano, nezáleží na tom, jestli jsi prvák, ostřílený student, máš 3 roky praxe v IT nebo jsi nikdy 
+              nevydělal ani korunu. Pokud máš nadšení a určitou dávku šílenství, máme pro Tebe mezi námi místo. 
+              Na činnosti spolku se dá podílet širokou škálou činností. Nutno říct, že jsou si ale všichni rovni. 
+              Baví Tě fotit? Shánět zajímavé kontakty z firem nebo přímo studentů na přednášky? Starat se o účetnictví a 
+              počítat daně? Nebo chceš jen občas uspořádat turnaj v beerpongu? Jsi nadšenec do gamingu? 
+              To jsou jen některé z činností, které lze ve spolku dělat. 
+              https://docs.google.com/forms/d/1KiXjUYKV6ENUORLbjjKoVTu0x2WFovWk0ZUvillPV9I/viewform?edit_requested=true
+              
+              <br><br>Akce
+              <br>Každý semestr pořádá FIS mnoho akcí, ve spolupráci se školou a partnery.
+              
+              <br>Vzdělávací akce: Své získané znalosti ze školy pomáháme rozšířit o zajímavé workshopy a přednášky jako 
+              programování v R, Photoshop, Asertivita a další. 
+              
+              <br>Nevzdělávací akce: Vysoká není jen škola, proto pořádáme několik akcí na odreagování. Studenti k nám 
+              mohou dorazit třeba na stolní fotbálek, beerpong nebo koncert. 
+              
+              <br>Gaming: Nejsme pozadu ani digitálně. Naše gaming sekce pořádá pravidelné LAN turnaje. 
+              https://4fis.cz/akce/?filter=vzdelavaci-akce
+              
+              <br><br>Pořádá 4FIS seznamovák?
+              <br>Ano, každoročně pořádáme seznamovací akce přímo ve spolupráci s fakultou, kde pomáháme začlenit nové studenty 
+              do života na Vysoké škole. Seznamovací kurz je pro nové i stávající studenty skvělou příležitostí nejen k 
+              seznámení se s fakultou a studijním programem, ale také k navázání nových přátelství a samozřejmě k posílení 
+              těch starých. Program kurzu připravují studenti fakulty FIS, kteří mají řadu zkušeností  s pořádání takových 
+              akcí a milují skvělou zábavu a pohodu. 
+              https://ksa.vse.cz/studium/magisterske-studium/informacni-management-ing/predsemestralni-soustredeni-studentu/?fbclid=IwAR1JUatTf0u016D2XxNVx-gX5q-LApyq7MtVNL8-E5WJzu4lRm2bsY0jNhI"
 
 
 session_config:
