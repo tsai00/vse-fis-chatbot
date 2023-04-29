@@ -8,11 +8,12 @@ import redis
 import pyarrow as pa
 
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -380,12 +381,12 @@ class ActionGetConsultingHours(Action):
         return "action_get_consulting_hours"
 
     def _init_browser(self):
-        options = webdriver.FirefoxOptions()
-        options.headless = True
-        #options.set_preference("general.useragent.override", f"user-agent={USER_AGENT}")
-        service = FirefoxService(executable_path=GeckoDriverManager().install())
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
 
-        browser = webdriver.Firefox(options=options, service=service)
+        browser = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
 
         return browser
 
