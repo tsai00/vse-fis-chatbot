@@ -334,7 +334,7 @@ class ActionGetCanteenMenu(Action):
 
         # First check if menu from today does not already exist in Redis (to avoid unnecessary requests)
         # Note: chatbot_redis is name of Docker container from docker compose
-        r = redis.Redis(host='chatbot_redis', port=6379, encoding="utf-8", decode_responses=True, db=0)
+        r = redis.Redis(host='localhost', port=6379, encoding="utf-8", decode_responses=True, db=0)
 
         redis_canteen_value = r.get(f'canteen_menu_{today}')
         context = pa.default_serialization_context()
@@ -542,7 +542,7 @@ class ActionGetConsultingHours(Action):
 
             # First check if result from today does not already exist in Redis (to avoid unnecessary requests)
             # Note: chatbot_redis is name of Docker container from docker compose
-            r = redis.Redis(host='chatbot_redis', port=6379, encoding="utf-8", decode_responses=True, db=0)
+            r = redis.Redis(host='localhost', port=6379, encoding="utf-8", decode_responses=True, db=0)
 
             redis_consulting_hours_value = r.get(f'consulting_hours_{person_id}_{today}')
             redis_consulting_hours_link_value = r.get(f'consulting_hours_link_{person_id}_{today}')
