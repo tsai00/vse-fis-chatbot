@@ -25,8 +25,7 @@ jobs:
           /usr/bin/git reset --hard HEAD && 
           echo "Creating .env file" && 
           cp .env.sample .env && 
-          HOST_IP=${{ secrets.HOST }} && 
-          sed -i "s/****/$HOST_IP/g" ./.env && 
+          sed -i "s|\*\*\*\*|${{ secrets.HOST }}|g" ./.env && 
           echo "Running docker compose down" && 
           docker compose down && 
           echo "Running docker compose up" && 
