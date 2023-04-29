@@ -83,3 +83,33 @@ rules:
   steps:
   - intent: trigger_action_get_consulting_hours
   - action: action_get_consulting_hours
+
+- rule: Show info about events
+  steps:
+  - intent: events
+  - action: action_detect_language
+  - action: utter_events
+
+- rule: Show info about academic year schedule
+  steps:
+  - intent: academic_year_schedule
+  - action: action_detect_language
+  - action: utter_academic_year_schedule
+
+- rule: Show info about addresses
+  steps:
+  - intent: addresses
+  - action: action_detect_language
+  - action: action_get_building_addresses
+
+- rule: Show info about scholarship
+  steps:
+  - intent: scholarship
+  - action: action_detect_language
+  - action: utter_scholarship
+
+- rule: Show info about tuition fee
+  steps:
+  - intent: tuition_fee
+  - action: action_detect_language
+  - action: utter_tuition_fee
