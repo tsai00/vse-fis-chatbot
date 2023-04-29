@@ -146,6 +146,16 @@ stories:
   - action: utter_video_manuals
 
 
+- story: Show info about credit system
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: credit_system
+  - action: action_detect_language
+  - action: utter_credit_system
+
+
 - story: provide with consulting hours
   steps:
   - intent: greet

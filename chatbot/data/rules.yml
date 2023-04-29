@@ -119,3 +119,9 @@ rules:
   - intent: video_manuals
   - action: action_detect_language
   - action: utter_video_manuals
+
+- rule: Show info about credit system
+  steps:
+  - intent: credit_system
+  - action: action_detect_language
+  - action: utter_credit_system

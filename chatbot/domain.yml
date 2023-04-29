@@ -43,6 +43,7 @@ intents:
   - scholarship
   - tuition_fee
   - video_manuals
+  - credit_system
 
 forms:
   professor_form:
@@ -404,6 +405,28 @@ responses:
             <br>Předměty: <a href='https://youtu.be/ep-SdjuNHE4' target='_blank'>odkaz</a>
             <br>Hodnocení předmětů: <a href='https://youtu.be/U7IocauH3cY' target='_blank'>odkaz</a>
             <br>Registrace a zápis předmětů: <a href='https://youtu.be/lDpNfHLHCPA' target='_blank'>odkaz</a>"
+
+
+  utter_credit_system:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "Each credit corresponds to 26 hours of study load. This means that a 3-credit course should be easier than a 6-credit course. 
+            <br>At the beginning of the Bachelor's degree, each student receives 216 ECTS credit vouchers. In order to successfully complete the Bachelor's degree, a student must obtain 180 credits. It follows that 36 credit vouchers are reserve vouchers, these are for repeating courses or for extra courses.
+            <br>After each semester, you must have earned a total of the number of credits that is the product of the number of semesters completed and the number 20 for full-time study. If you do not meet this requirement, credits will be deducted to the extent of the shortfall in the above multiplier. However, the recommended pace of study is 30 credits per semester. Of course, you can take 34 some semesters and only 26 the next and nothing will happen. 
+            <br>A student may apply to the Dean of the Faculty for the addition of credits. They are usually awarded upon completion of the degree, so it is not an award of tens or hundreds of credits. However, their allocation is not certain and each request is considered individually. 
+            <br>If you are still unclear, here is a <a href='https://www.vse.cz/predpisy/studijni-a-zkusebni-rad-vysoke-skoly-ekonomicke-v-praze-platny-pro-studenty-zapsane-ke-studiu-do-akademickeho-roku-2018-2019-a-drive/' target='_blank'>link to the Study and Examination Regulations of the University of Economics</a>."
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Každý kredit odpovídá 26 hodinám studijní zátěže. To znamená, že předmět za 3 kredity by měl být snadnější než předmět za 6 kreditů. 
+            <br>Na začátku bakalářského studia dostane každý student 216 poukázek na kredity ECTS. Pro úspěšné absolvování bakalářského oboru musí student získat 180 kreditů. Z toho vyplývá, že 36 kreditových poukázek je rezervních, ty jsou určeny na opakování předmětů nebo na předměty navíc.
+            <br>Po každém semestru musíš mít v celkovém součtu získáno tolik kreditů, kolik je násobek počtu odstudovaných semestrů, a čísla 20 u prezenční formy studia. Pokud nesplníš tento požadavek, budou ti odečteny kredity v hodnotě chybějící do výše zmíněného násobku. Doporučené tempo studia je ale 30 kreditů za semestr. Samozřejmě některý semestr můžeš studovat 34, další pak jenom 26 a nic se nestane. 
+            <br>O přidání kreditů může požádat student u děkana fakulty. Přidělují se většinou na dostudování, takže se nejedná o přidělení v řádu desítek či stovek kreditů. Jejich přidělení ale není jisté a každá žádost se posuzuje individuálně. 
+            <br>Kdyby ti ještě nebylo něco jasné, tak zde je <a href='https://www.vse.cz/predpisy/studijni-a-zkusebni-rad-vysoke-skoly-ekonomicke-v-praze-platny-pro-studenty-zapsane-ke-studiu-do-akademickeho-roku-2018-2019-a-drive/' target='_blank'>odkaz na Studijní a zkušební řád VŠE</a>."
 
 
 session_config:

@@ -370,3 +370,21 @@ nlu:
     - Where can I find a Video manual about subject evaluation?
     - Where can I find a Video manual about registration of subjects?
     - What will I learn from the video manuals?
+    
+
+- intent: credit_system
+  examples: |
+    - Jak funguje kreditový systém
+    - Kredity
+    - Kredity bakalářské studium
+    - Jaký počet kreditů musím odstudovat za studium
+    - Co jsou kreditové poukázky
+    - How the credit system works
+    - Credits
+    - Bachelor's degree credits
+    - How many credits do I need to complete for my studies
+    - What are credit vouchers
+    - ECTS
+    - What is ECTS?
+    - ECTS co to je
+    - kolik mám kreditů na začátků?
