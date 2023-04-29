@@ -184,9 +184,11 @@ class ActionIntroMessage(Action):
                                       "Pamatuj si ale prosím, že se jen učím a nejsem Chat GPT-5 :)")
 
         button_resp = [
-            {"title": "Bakalářské studium", "payload": '/study_programs{"bachelor_degree": "bakalářské", "language": "Czech"}'},
-            {"title": "Magisterské studium", "payload": '/study_programs{"master_degree": "magisterské", "language": "Czech"}'},
-            {"title": "Doktorské studium", "payload": '/study_programs{"doctor_degree": "doktorksé", "language": "Czech"}'},
+            {"title": "Bakalářské obory", "payload": '/study_programs{"bachelor_degree": "bakalářské", "language": "Czech"}'},
+            {"title": "Magisterské obory", "payload": '/study_programs{"master_degree": "magisterské", "language": "Czech"}'},
+            {"title": "Doktorské obory", "payload": '/study_programs{"doctor_degree": "doktorksé", "language": "Czech"}'},
+            {"title": "Hledat konzultační hodiny", "payload": '/consulting_hours{"language": "Czech"}'},
+            {"title": "Dnešní jídelníček", "payload": '/canteen_menu{"language": "Czech"}'},
         ]
 
         dispatcher.utter_message(text="Nevíš, jak se zeptat? Tady jsme pro tebe připravili nejčastější okruhy otázek.", buttons=button_resp)
