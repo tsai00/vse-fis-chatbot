@@ -113,3 +113,9 @@ rules:
   - intent: tuition_fee
   - action: action_detect_language
   - action: utter_tuition_fee
+
+- rule: Show info about video manuals
+  steps:
+  - intent: video_manuals
+  - action: action_detect_language
+  - action: utter_video_manuals

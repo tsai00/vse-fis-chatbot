@@ -346,3 +346,27 @@ nlu:
     - What are the fees for exceeding the course?
     - How much does it cost to study in a foreign language at VŠE?
     - How big is tuition fee?
+    
+
+- intent: video_manuals
+  examples: |
+    - Kde najdu video příručky?
+    - Kde najdu video příručku k budovám na Žižkově?
+    - Kde najdu video příručku k budovám na Jižáku?
+    - Kde najdu video příručku ke kolejím?
+    - Kde najdu video příručku k InSISu?
+    - Kde najdu video příručku ke kreditovému systému?
+    - Kde najdu video příručku k předmětům?
+    - Kde najdu video příručku k hodnocení z předmětů?
+    - Kde najdu video příručku k registracím a zápisu předmětů?
+    - Co se dozvím z video příruček?
+    - Where can I find video manuals?
+    - Where can I find Video manual about buildings in Žižkov?
+    - Where can I find Video manual abot buildings in Jižák?
+    - Where can I find Video manual about the dorm?
+    - Where can I find Video manual about InSIS?
+    - Where can I find Video manual about school credit system?
+    - Where can I find Video manual about subjects?
+    - Where can I find a Video manual about subject evaluation?
+    - Where can I find a Video manual about registration of subjects?
+    - What will I learn from the video manuals?

@@ -136,6 +136,16 @@ stories:
   - action: utter_tuition_fee
 
 
+- story: Show info about video manuals
+  steps:
+  - intent: greet
+  - action: action_detect_language
+  - action: utter_greet
+  - intent: video_manuals
+  - action: action_detect_language
+  - action: utter_video_manuals
+
+
 - story: provide with consulting hours
   steps:
   - intent: greet

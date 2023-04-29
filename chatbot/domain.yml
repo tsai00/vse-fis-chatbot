@@ -42,6 +42,7 @@ intents:
   - addresses
   - scholarship
   - tuition_fee
+  - video_manuals
 
 forms:
   professor_form:
@@ -373,6 +374,36 @@ responses:
           value: cs
       text: "Poplatky spojené se studiem najdeš <a href='https://www.vse.cz/predpisy/poplatky-spojene-se-studiem-v-akademickem-roce-2022-2023/' target='_blank'>zde</a>."
 
+  utter_video_manuals:
+    - condition:
+        - type: slot
+          name: langcode
+          value: en
+      text: "From Video manuals, you will find out everything about the buildings of the University of Economics, how the information system at the University of Economics works, the method of assessment, the credit system, the number of exams and the creation of a schedule.
+            <br>You can find manual <a href='https://fis.vse.cz/obecne-informace/video-prirucky/' target='_blank'>here</a>
+            <br>Buildings in Žižkov: <a href='https://youtu.be/PqqfNpW0s6w' target='_blank'>link</a>
+            <br>Buildings in Jižák: <a href='https://youtu.be/NA5Zwj2mXxs' target='_blank'>link</a>
+            <br>Dorms: <a href='https://youtu.be/MpdQkwPCDFA' target='_blank'>link</a>
+            <br>InSIS: <a href='https://youtu.be/2LhFPuWy8U4' target='_blank'>link</a>
+            <br>Credit system: <a href='https://youtu.be/7AZ9Txwfgb8' target='_blank'>link</a>
+            <br>Subjects: <a href='https://youtu.be/ep-SdjuNHE4' target='_blank'>link</a>
+            <br>Subject evaluation: <a href='https://youtu.be/U7IocauH3cY' target='_blank'>link</a>
+            <br>Registration of subjects: <a href='https://youtu.be/lDpNfHLHCPA' target='_blank'>link</a>"
+
+    - condition:
+        - type: slot
+          name: langcode
+          value: cs
+      text: "Z video příruček zjistíš vše o budovách VŠE, jak funguje informační systém na VŠE, způsob hodnocení, kreditový systém, počty zkoušek či vytváření rozvrhu.
+            <br>Video příručky najdeš zde na tomto <a href='https://fis.vse.cz/obecne-informace/video-prirucky/' target='_blank'>odkazu</a>
+            <br>Budovy na Žižkově: <a href='https://youtu.be/PqqfNpW0s6w' target='_blank'>odkaz</a>
+            <br>Budovy na Jižáku: <a href='https://youtu.be/NA5Zwj2mXxs' target='_blank'>odkaz</a>
+            <br>Koleje: <a href='https://youtu.be/MpdQkwPCDFA' target='_blank'>odkaz</a>
+            <br>InSIS: <a href='https://youtu.be/2LhFPuWy8U4' target='_blank'>odkaz</a>
+            <br>Kreditový systém: <a href='https://youtu.be/7AZ9Txwfgb8' target='_blank'>odkaz</a>
+            <br>Předměty: <a href='https://youtu.be/ep-SdjuNHE4' target='_blank'>odkaz</a>
+            <br>Hodnocení předmětů: <a href='https://youtu.be/U7IocauH3cY' target='_blank'>odkaz</a>
+            <br>Registrace a zápis předmětů: <a href='https://youtu.be/lDpNfHLHCPA' target='_blank'>odkaz</a>"
 
 
 session_config:
