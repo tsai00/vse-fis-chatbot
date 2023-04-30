@@ -104,7 +104,7 @@ class ActionStudyPrograms(Action):
             if language == 'en':
                 message = f"FIS currently offers following programs: <br>Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
             else:
-                message = f"FIS momentálně nabízí následující programy: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
+                message = f"FIS momentálně nabízí následující programy: <br>Bakalářské: {bachelor_programs}<br>" + f"Magisterské: {master_programs}<br>" + f"Doktorské: {doctor_programs}"
 
         else:
             message = ''
