@@ -354,6 +354,7 @@ class ActionGetCanteenMenu(Action):
         language = tracker.get_slot('langcode')
 
         today = f'{datetime.datetime.now():%Y-%m-%d}'
+        today = '2023-05-01'
 
         # First check if menu from today does not already exist in Redis (to avoid unnecessary requests)
         # Note: chatbot_redis is name of Docker container from docker compose
