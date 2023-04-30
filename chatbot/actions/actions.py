@@ -219,6 +219,17 @@ class ActionDefaultAskAffirmation(Action):
                 "study_programs": "Study programs",
                 "holiday": "Who has holiday today?",
                 "canteen_menu": "Canteen menu",
+                "accommodation": "Accommodation",
+                "student_unity": "Student unity",
+                "consulting_hours": "Consulting hours",
+                "events": "Events",
+                "academic_year_schedule": "Academic year schedule",
+                "addresses": "Addresses",
+                "scholarship": "Scholarship",
+                "tuition_fee": "Tuition fee",
+                "video_manuals": "Video manuals",
+                "credit_system": "ECTS system",
+                "buildings_map": "Buildings map",
             }
 
             message = "Sorry, can not understand you. What do you want to do?"
@@ -228,6 +239,17 @@ class ActionDefaultAskAffirmation(Action):
                 "study_programs": "Studijní programy",
                 "holiday": "Kdo má svátek dneska?",
                 "canteen_menu": "Jidelníček na dnes",
+                "accommodation": "Ubytování",
+                "student_unity": "Studentské spolky",
+                "consulting_hours": "Konzultační hodiny",
+                "events": "Akce",
+                "academic_year_schedule": "Harmonogram",
+                "addresses": "Adresy budov",
+                "scholarship": "Stipendia",
+                "tuition_fee": "Poplatky za studium",
+                "video_manuals": "Video příručky",
+                "credit_system": "Kreditový systém",
+                "buildings_map": "Mapa budov",
             }
 
             message = "Promiň, nerozumím ti. Máš na mysli něco z tohohle?"
