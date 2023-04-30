@@ -152,7 +152,19 @@ class ActionGetHoliday(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         language = tracker.get_slot('langcode')
-        todays_holiday = self._get_todays_holiday()
+
+        r = redis.Redis(host='localhost', port=6379, encoding="utf-8", decode_responses=True, db=0)
+
+        today = f'{datetime.datetime.now():%Y-%m-%d}'
+        redis_holiday_value = r.get(f'holiday_{today}')
+
+        if redis_holiday_value is None or not redis_holiday_value:
+            todays_holiday = self._get_todays_holiday()
+
+            redis_holiday_value = todays_holiday if todays_holiday is not None else ''
+            r.set(f'holiday_{today}', redis_holiday_value)
+        else:
+            todays_holiday = redis_holiday_value
 
         if language == 'en':
             if todays_holiday is not None:
