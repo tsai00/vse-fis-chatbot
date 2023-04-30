@@ -629,7 +629,7 @@ class ActionGetBuildingAddresses(Action):
             json_dict = json.load(f)
 
         default_message_en = """
-                    <br>VŠE is located in two locations in Prague.
+                    VŠE is located in two locations in Prague.
                     <br>In <b>Žižkov</b> with the address: nám. W. Churchilla 1938/4, 130 67 Prague 3 - Žižkov. And in the <b>Jižní Město</b> area: Ekonomická 957, 148 00 Prague 4 - Kunratice
                     <br>In area Žižkov are located four buildings. <b>New building</b>, <b>Old building</b>, <b>Rajska building</b> and <b>Italska building</b>.
                     <br>\u2022 <b>Library</b> is located in Old building in Žižkov area.
@@ -643,7 +643,7 @@ class ActionGetBuildingAddresses(Action):
                 """
 
         default_message_cs = """
-                <br>VŠE sídlí na dvou místech v Praze. 
+                VŠE sídlí na dvou místech v Praze. 
                 <br>Na <b>Žižkově</b> s adresou: nám. W. Churchilla 1938/4, 130 67 Praha 3 - Žižkov. A v areálu <b>Jižní Město</b>: Ekonomická 957, 148 00 Praha 4 - Kunratice.
                 <br>V areálu Žižkov se nacházejí čtyři budovy. <b>Nová budova</b>, <b>Stará budova</b>, <b>Rajská budova</b> a <b>Italská budova</b>.
                 <br>\u2022 <b>Knihovna</b> se nachází ve staré budově v areálu Žižkov.
