@@ -118,6 +118,12 @@ nlu:
   examples: |
     - who's holiday is today?
     - kdo má dneska svátek?
+    - kdo ma svatek dneska?
+    - svátek dnes
+    - svatek dneska
+    - čí svátek je dnes?
+    - má někdo svátek dnes?
+  
 
 - lookup: bachelor_degree
   examples: |

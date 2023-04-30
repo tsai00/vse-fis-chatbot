@@ -104,7 +104,7 @@ class ActionStudyPrograms(Action):
             if language == 'en':
                 message = f"FIS currently offers following programs: <br>Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
             else:
-                message = f"FIS momentálně nabízí následující programy: <br>Bachelor: {bachelor_programs}<br>" + f"Master: {master_programs}<br>" + f"PhD: {doctor_programs}"
+                message = f"FIS momentálně nabízí následující programy: <br>Bakalářské: {bachelor_programs}<br>" + f"Magisterské: {master_programs}<br>" + f"Doktorské: {doctor_programs}"
 
         else:
             message = ''
@@ -152,7 +152,19 @@ class ActionGetHoliday(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         language = tracker.get_slot('langcode')
-        todays_holiday = self._get_todays_holiday()
+
+        r = redis.Redis(host='localhost', port=6379, encoding="utf-8", decode_responses=True, db=0)
+
+        today = f'{datetime.datetime.now():%Y-%m-%d}'
+        redis_holiday_value = r.get(f'holiday_{today}')
+
+        if redis_holiday_value is None or not redis_holiday_value:
+            todays_holiday = self._get_todays_holiday()
+
+            redis_holiday_value = todays_holiday if todays_holiday is not None else ''
+            r.set(f'holiday_{today}', redis_holiday_value)
+        else:
+            todays_holiday = redis_holiday_value
 
         if language == 'en':
             if todays_holiday is not None:
@@ -219,6 +231,17 @@ class ActionDefaultAskAffirmation(Action):
                 "study_programs": "Study programs",
                 "holiday": "Who has holiday today?",
                 "canteen_menu": "Canteen menu",
+                "accommodation": "Accommodation",
+                "student_unity": "Student unity",
+                "consulting_hours": "Consulting hours",
+                "events": "Events",
+                "academic_year_schedule": "Academic year schedule",
+                "addresses": "Addresses",
+                "scholarship": "Scholarship",
+                "tuition_fee": "Tuition fee",
+                "video_manuals": "Video manuals",
+                "credit_system": "ECTS system",
+                "buildings_map": "Buildings map",
             }
 
             message = "Sorry, can not understand you. What do you want to do?"
@@ -228,6 +251,17 @@ class ActionDefaultAskAffirmation(Action):
                 "study_programs": "Studijní programy",
                 "holiday": "Kdo má svátek dneska?",
                 "canteen_menu": "Jidelníček na dnes",
+                "accommodation": "Ubytování",
+                "student_unity": "Studentské spolky",
+                "consulting_hours": "Konzultační hodiny",
+                "events": "Akce",
+                "academic_year_schedule": "Harmonogram",
+                "addresses": "Adresy budov",
+                "scholarship": "Stipendia",
+                "tuition_fee": "Poplatky za studium",
+                "video_manuals": "Video příručky",
+                "credit_system": "Kreditový systém",
+                "buildings_map": "Mapa budov",
             }
 
             message = "Promiň, nerozumím ti. Máš na mysli něco z tohohle?"
@@ -332,6 +366,7 @@ class ActionGetCanteenMenu(Action):
         language = tracker.get_slot('langcode')
 
         today = f'{datetime.datetime.now():%Y-%m-%d}'
+        today = '2023-05-01'
 
         # First check if menu from today does not already exist in Redis (to avoid unnecessary requests)
         # Note: chatbot_redis is name of Docker container from docker compose
@@ -629,7 +664,7 @@ class ActionGetBuildingAddresses(Action):
             json_dict = json.load(f)
 
         default_message_en = """
-                    <br>VŠE is located in two locations in Prague.
+                    VŠE is located in two locations in Prague.
                     <br>In <b>Žižkov</b> with the address: nám. W. Churchilla 1938/4, 130 67 Prague 3 - Žižkov. And in the <b>Jižní Město</b> area: Ekonomická 957, 148 00 Prague 4 - Kunratice
                     <br>In area Žižkov are located four buildings. <b>New building</b>, <b>Old building</b>, <b>Rajska building</b> and <b>Italska building</b>.
                     <br>\u2022 <b>Library</b> is located in Old building in Žižkov area.
@@ -643,7 +678,7 @@ class ActionGetBuildingAddresses(Action):
                 """
 
         default_message_cs = """
-                <br>VŠE sídlí na dvou místech v Praze. 
+                VŠE sídlí na dvou místech v Praze. 
                 <br>Na <b>Žižkově</b> s adresou: nám. W. Churchilla 1938/4, 130 67 Praha 3 - Žižkov. A v areálu <b>Jižní Město</b>: Ekonomická 957, 148 00 Praha 4 - Kunratice.
                 <br>V areálu Žižkov se nacházejí čtyři budovy. <b>Nová budova</b>, <b>Stará budova</b>, <b>Rajská budova</b> a <b>Italská budova</b>.
                 <br>\u2022 <b>Knihovna</b> se nachází ve staré budově v areálu Žižkov.
